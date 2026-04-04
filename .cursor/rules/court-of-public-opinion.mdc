@@ -1,0 +1,18 @@
+---
+description: Court of Public Opinion — mandatory implementation discipline (read TODO and AGENTS first).
+alwaysApply: true
+---
+
+# Court of Public Opinion — agent discipline
+
+[`AGENTS.md`](AGENTS.md) at the repository root is **binding**. Work that contradicts it is incorrect.
+
+**Non-negotiables:**
+
+1. Read [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md) first (snapshot + session log), then the execution checklist the snapshot implies.
+2. Record progress **only** with checkboxes on `docs/*_execution_checklist.md` files — not duplicate lists in TODO.
+3. Do **not** skip phases or steps without a **session log** decision (date + rationale) in [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md).
+4. End of each pass: checklist update, TODO snapshot update, session log append, and doc updates if schemas or architecture changed ([`docs/project-rules.md`](docs/project-rules.md)).
+5. One pass = **one** checklist step unless the TODO snapshot explicitly names a small batch.
+
+Detail and ordered startup: [`AGENTS.md`](AGENTS.md). Principles and DoD: [`docs/project-rules.md`](docs/project-rules.md).

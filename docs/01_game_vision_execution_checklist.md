@@ -29,21 +29,21 @@
 - Create a predictable working rhythm for phased implementation.
 
 ### Checklist
-- [ ] Phase 0, Step 1: Create a new repository for the game and define the project name.
-- [ ] Phase 0, Step 2: Add a root `README.md` describing the pitch, MVP scope, stack, and local run commands.
-- [ ] Phase 0, Step 3: Add a `/docs` folder for design, implementation, and content schemas.
-- [ ] Phase 0, Step 4: Add a `/src` folder layout plan in the docs before writing game code.
-- [ ] Phase 0, Step 5: Define core principles in `/docs/project-rules.md`:
+- [x] Phase 0, Step 1: Create a new repository for the game and define the project name.
+- [x] Phase 0, Step 2: Add a root `README.md` describing the pitch, MVP scope, stack, and local run commands.
+- [x] Phase 0, Step 3: Add a `/docs` folder for design, implementation, and content schemas.
+- [x] Phase 0, Step 4: Add a `/src` folder layout plan in the docs before writing game code.
+- [x] Phase 0, Step 5: Define core principles in `/docs/project-rules.md`:
   - deterministic case logic
   - structured player input
   - jury decides verdict
   - judge is bounded
   - one courtroom map for MVP
-- [ ] Phase 0, Step 6: Add a `/data` folder for cases, evidence, witnesses, jurors, cards, and role configs.
-- [ ] Phase 0, Step 7: Add a `/public` folder plan for textures, fonts, audio, and model exports.
-- [ ] Phase 0, Step 8: Decide naming conventions for IDs, scene files, UI panels, and gameplay systems.
-- [ ] Phase 0, Step 9: Create a `TODO_IMPLEMENTATION.md` master file linking all phase docs.
-- [ ] Phase 0, Step 10: Define Definition of Done for each feature:
+- [x] Phase 0, Step 6: Add a `/data` folder for cases, evidence, witnesses, jurors, cards, and role configs.
+- [x] Phase 0, Step 7: Add a `/public` folder plan for textures, fonts, audio, and model exports.
+- [x] Phase 0, Step 8: Decide naming conventions for IDs, scene files, UI panels, and gameplay systems.
+- [x] Phase 0, Step 9: Create a `TODO_IMPLEMENTATION.md` master file linking all phase docs.
+- [x] Phase 0, Step 10: Define Definition of Done for each feature:
   - code exists
   - behavior is testable
   - UI feedback exists
