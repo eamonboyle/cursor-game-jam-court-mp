@@ -14,16 +14,16 @@
 - Separate rendering, UI, and gameplay state from the start.
 
 ### Checklist
-- [ ] Phase 1, Step 1: Create `/src/app` for app bootstrap and lifecycle.
-- [ ] Phase 1, Step 2: Create `/src/rendering` for Three.js scene systems.
-- [ ] Phase 1, Step 3: Create `/src/ui` for overlay components and HUD panels.
-- [ ] Phase 1, Step 4: Create `/src/game` for rules, match state, and actions.
-- [ ] Phase 1, Step 5: Create `/src/data` for loaders and schema validation.
-- [ ] Phase 1, Step 6: Create `/src/audio` for music and one-shot sound hooks.
-- [ ] Phase 1, Step 7: Create `/src/debug` for dev panels and inspectors.
-- [ ] Phase 1, Step 8: Create an `AppRoot` that initializes renderer, scene, UI, and game state.
-- [ ] Phase 1, Step 9: Add global error boundaries or fail-safe logging where practical.
-- [ ] Phase 1, Step 10: Document folder ownership and file responsibilities.
+- [x] Phase 1, Step 1: Create `/src/app` for app bootstrap and lifecycle.
+- [x] Phase 1, Step 2: Create `/src/rendering` for Three.js scene systems.
+- [x] Phase 1, Step 3: Create `/src/ui` for overlay components and HUD panels.
+- [x] Phase 1, Step 4: Create `/src/game` for rules, match state, and actions.
+- [x] Phase 1, Step 5: Create `/src/data` for loaders and schema validation.
+- [x] Phase 1, Step 6: Create `/src/audio` for music and one-shot sound hooks.
+- [x] Phase 1, Step 7: Create `/src/debug` for dev panels and inspectors.
+- [x] Phase 1, Step 8: Create an `AppRoot` that initializes renderer, scene, UI, and game state.
+- [x] Phase 1, Step 9: Add global error boundaries or fail-safe logging where practical.
+- [x] Phase 1, Step 10: Document folder ownership and file responsibilities.
 
 ### Exit criteria
 - Codebase structure is predictable.

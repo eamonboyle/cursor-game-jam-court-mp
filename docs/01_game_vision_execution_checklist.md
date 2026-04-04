@@ -65,22 +65,22 @@
 - Create the foundation the rest of the game builds on.
 
 ### Checklist
-- [ ] Phase 1, Step 1: Initialize a Vite TypeScript project.
-- [ ] Phase 1, Step 2: Install Three.js and supporting runtime dependencies.
-- [ ] Phase 1, Step 3: Install development tooling:
+- [x] Phase 1, Step 1: Initialize a Vite TypeScript project.
+- [x] Phase 1, Step 2: Install Three.js and supporting runtime dependencies.
+- [x] Phase 1, Step 3: Install development tooling:
   - ESLint
   - Prettier
   - TypeScript strict settings
-- [ ] Phase 1, Step 4: Add npm scripts for dev, build, preview, lint, and typecheck.
-- [ ] Phase 1, Step 5: Create the base `src/main.ts` entrypoint.
-- [ ] Phase 1, Step 6: Create a minimal application shell that mounts:
+- [x] Phase 1, Step 4: Add npm scripts for dev, build, preview, lint, and typecheck.
+- [x] Phase 1, Step 5: Create the base `src/main.ts` entrypoint.
+- [x] Phase 1, Step 6: Create a minimal application shell that mounts:
   - Three.js canvas
   - UI overlay root
   - debug HUD root
-- [ ] Phase 1, Step 7: Confirm the project runs locally with no errors.
-- [ ] Phase 1, Step 8: Add a neutral background scene to verify rendering pipeline.
-- [ ] Phase 1, Step 9: Add a basic resize handler for the renderer and camera.
-- [ ] Phase 1, Step 10: Commit a clean bootstrap checkpoint.
+- [x] Phase 1, Step 7: Confirm the project runs locally with no errors.
+- [x] Phase 1, Step 8: Add a neutral background scene to verify rendering pipeline.
+- [x] Phase 1, Step 9: Add a basic resize handler for the renderer and camera.
+- [x] Phase 1, Step 10: Commit a clean bootstrap checkpoint.
 
 ### Exit criteria
 - The game boots in browser.

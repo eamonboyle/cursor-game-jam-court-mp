@@ -17,7 +17,16 @@ Browser-based multiplayer courtroom party game: fast, theatrical trials with str
 
 ## Local development
 
-**Not yet bootstrapped.** Run commands (`npm install`, `npm run dev`, etc.) will be added in **Vision Phase 1** per [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md). Until then, this repo is design + repo framing only.
+```bash
+npm install
+npm run dev      # Vite dev server + hot reload
+npm run build    # Typecheck + production bundle to dist/
+npm run preview  # Serve dist/
+npm run lint
+npm run typecheck
+```
+
+Vision Phase 1 bootstrap is complete (see [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md)). Next milestone: Vision Phase 2 — MVP scope lock ([`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md)).
 
 ## Contributing / agents
 

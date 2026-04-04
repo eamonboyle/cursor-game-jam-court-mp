@@ -10,9 +10,9 @@
 | Field                    | Value                                                                                                                                                                                                                                    |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                                                  |
-| **Active track**         | Vision checklist (game bootstrap) — *Technical architecture checklist may parallel later; this row names what drives the current pass.*                                                                                                  |
-| **Current phase / step** | Phase 0 complete; **next: Vision Phase 1, Step 1** — Initialize a Vite TypeScript project.                                                                                                                                               |
-| **Next action**          | Run Vision Phase 1 in `[docs/01_game_vision_execution_checklist.md](docs/01_game_vision_execution_checklist.md)` from Step 1; align `src/` creation with `[docs/repo_layout.md](docs/repo_layout.md)` and technical Phase 1 when coding. |
+| **Active track**         | Vision checklist — **next: Phase 2 (MVP vision lock)**. Technical arch Phase 1 complete in lockstep with Vision Phase 1.                                                                                                              |
+| **Current phase / step** | Vision Phase 1 complete; **next: Vision Phase 2, Step 1** — Write [`docs/mvp-scope.md`](docs/mvp-scope.md).                                                                                                                             |
+| **Next action**          | Draft one-page MVP statement and scope boundaries per `[docs/01_game_vision_execution_checklist.md](docs/01_game_vision_execution_checklist.md)` Phase 2.                                                                                |
 
 
 **Blockers:** none.
@@ -58,6 +58,12 @@ Do **not** paste full checklists into this file.
 - **Next:** …
 - **Blockers / decisions:** …
 ```
+
+### 2026-04-05 — Vision Phase 1 bootstrap (Vite + Three.js shell)
+
+- **Done:** Vite + strict TypeScript, Three.js, ESLint/Prettier, `src/{app,rendering,ui,game,data,audio,debug}`, `AppRoot`, canvas + UI + debug HUD, resize handler, minimal lit scene, global error handlers; Vision Phase 1 and Technical Phase 1 checklists marked complete; [`docs/repo_layout.md`](docs/repo_layout.md) updated with file ownership; README run commands.
+- **Next:** Vision Phase 2, Step 1 — [`docs/mvp-scope.md`](docs/mvp-scope.md).
+- **Blockers / decisions:** `@types/three` added as devDependency (Three npm package lacks `types` entry for this toolchain).
 
 ### 2026-04-04 — Phase 0 repo framing
 
