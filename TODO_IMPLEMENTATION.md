@@ -11,8 +11,8 @@
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
 | **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
-| **Current phase / step** | **Milestone E** complete; **next: Milestone F** — Jury evaluate and vote.                                                                                                                               |
-| **Next action**          | Wire jury deliberation UI and vote aggregation; follow [`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md) Phase 6+ and vision Milestone F.            |
+| **Current phase / step** | **Milestone F** complete; **next: Milestone G** — AI-filled seats.                                                                                                                                       |
+| **Next action**          | Stub AI juror/counsel behavior and seat assignment; follow [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) Milestone G and gameplay Phase 8 where relevant.      |
 
 
 **Blockers:** none.
@@ -59,11 +59,17 @@ Do **not** paste full checklists into this file.
 - **Blockers / decisions:** …
 ```
 
+### 2026-04-06 — Milestone F jury deliberation and verdict tally
+
+- **Done:** `juryVotes` + `verdictOutcome` on `MatchState`; `tryCastJuryVote` / `castJuryVote`; phase hooks reset poll on `jury_deliberation`, resolve on `verdict`, clear on `idle`; counsel/evidence locked in deliberation + verdict; UI jury buttons + poll/verdict lines; HUD jury/verdict; Vitest for jury + phase reset.
+- **Next:** Milestone G (AI seats).
+- **Blockers / decisions:** Local stub uses six manual clicks for the full poll; AI mix-ins come with Milestone G.
+
 ### 2026-04-06 — Milestone E judge bounded rulings
 
 - **Done:** `objection` phase assigns `activeRole` judge; `tryAppendJudgeRuling` + `recordJudgeRuling`; counsel/evidence inputs blocked during objection; overlay judge palette + last ruling line; Vitest for rulings + active role; camera uses judge preset (removed objection-wide override); `RulingEntry.rulingId` optional field.
-- **Next:** Milestone F (jury vote UI and state).
-- **Blockers / decisions:** Ticket 9 jury vote screen still open — judge window portion shipped under Milestone E.
+- **Next:** (superseded by Milestone F log above.)
+- **Blockers / decisions:** none.
 
 ### 2026-04-06 — Milestone D counsel UI + camera/lighting fix
 

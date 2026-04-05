@@ -75,6 +75,43 @@ body {
   background: rgb(0 0 0 / 35%);
 }
 
+.jury-panel {
+  margin-top: 12px;
+  max-width: min(640px, 100%);
+  pointer-events: auto;
+}
+
+.jury-panel-hint {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  opacity: 0.78;
+  line-height: 1.35;
+}
+
+.jury-vote-btn {
+  cursor: pointer;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 5px;
+  border: 1px solid rgb(255 255 255 / 25%);
+  color: inherit;
+}
+
+.jury-vote-btn--guilty {
+  border-color: rgb(200 90 90 / 55%);
+  background: rgb(55 22 22 / 55%);
+}
+
+.jury-vote-btn--innocent {
+  border-color: rgb(90 140 200 / 55%);
+  background: rgb(22 35 55 / 55%);
+}
+
+.jury-vote-btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
 .judge-panel {
   margin-top: 12px;
   max-width: min(640px, 100%);
@@ -148,7 +185,8 @@ body {
 
 .counsel-card-btn:disabled,
 .evidence-btn:disabled,
-.judge-ruling-btn:disabled {
+.judge-ruling-btn:disabled,
+.jury-vote-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }

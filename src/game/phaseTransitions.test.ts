@@ -6,6 +6,7 @@ import {
   isTransitionAllowed,
   listLegalNextPhases,
 } from "./phaseTransitions";
+import { tryCastJuryVote } from "./jury";
 import { createInitialMatchState } from "./matchState";
 
 describe("phaseTransitions", () => {
@@ -53,6 +54,29 @@ describe("phaseTransitions", () => {
 
   it("objection phase puts judge active for bounded rulings", () => {
     expect(defaultActiveRoleForPhase("objection")).toBe("judge");
+  });
+
+  it("entering jury_deliberation clears poll and verdict preview", () => {
+    const { state: s0, timer } = createInitialMatchState();
+    const s1 = applyPhaseTransition(s0, timer, "jury_deliberation", {
+      force: true,
+      atMs: 0,
+    });
+    if (!s1.ok) throw new Error("setup");
+    const cast = tryCastJuryVote(s1.state, "guilty", 1);
+    if (!cast.ok) throw new Error("setup");
+    const s3 = applyPhaseTransition(cast.state, timer, "idle", {
+      force: true,
+      atMs: 1,
+    });
+    if (!s3.ok) throw new Error("setup");
+    const s4 = applyPhaseTransition(s3.state, timer, "jury_deliberation", {
+      force: true,
+      atMs: 2,
+    });
+    if (!s4.ok) throw new Error("setup");
+    expect(s4.state.juryVotes).toHaveLength(0);
+    expect(s4.state.verdictOutcome).toBeNull();
   });
 
   it("rejects examination -> closing without force", () => {

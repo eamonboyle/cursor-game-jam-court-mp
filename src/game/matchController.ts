@@ -4,6 +4,7 @@ import {
   tryAppendJudgeRuling,
   type JudgeRulingId,
 } from "./judgeRulings";
+import { tryCastJuryVote, type JuryVote } from "./jury";
 import {
   applyPhaseTransition,
   listLegalNextPhases,
@@ -122,6 +123,19 @@ export class MatchController {
   /**
    * Milestone E — judge picks from bounded ruling list during `objection` only.
    */
+  /** Milestone F — one juror vote per click until the stub panel is full. */
+  castJuryVote(vote: JuryVote): boolean {
+    const result = tryCastJuryVote(this.state, vote, performance.now());
+    if (!result.ok) {
+      if (this.debugTransitions) console.warn("[trial] jury vote:", result.reason);
+      return false;
+    }
+    this.state = result.state;
+    if (this.debugTransitions) console.debug("[trial] jury vote", vote, this.state.juryVotes.length);
+    this.emit();
+    return true;
+  }
+
   recordJudgeRuling(rulingId: JudgeRulingId): boolean {
     const result = tryAppendJudgeRuling(this.state, rulingId, performance.now());
     if (!result.ok) {
@@ -136,9 +150,13 @@ export class MatchController {
 
   /** Milestone D — structured counsel action (local only). */
   playCard(side: CounselSide, cardId: string): void {
-    if (this.state.phase === "objection") {
+    if (
+      this.state.phase === "objection" ||
+      this.state.phase === "jury_deliberation" ||
+      this.state.phase === "verdict"
+    ) {
       if (this.debugTransitions)
-        console.warn("[trial] counsel cards disabled during objection (judge window)");
+        console.warn("[trial] counsel cards disabled in this phase");
       return;
     }
     this.state = {
@@ -153,9 +171,13 @@ export class MatchController {
   }
 
   revealEvidence(evidenceId: string): void {
-    if (this.state.phase === "objection") {
+    if (
+      this.state.phase === "objection" ||
+      this.state.phase === "jury_deliberation" ||
+      this.state.phase === "verdict"
+    ) {
       if (this.debugTransitions)
-        console.warn("[trial] evidence reveals disabled during objection (judge window)");
+        console.warn("[trial] evidence reveals disabled in this phase");
       return;
     }
     if (this.state.evidenceStack.includes(evidenceId)) return;

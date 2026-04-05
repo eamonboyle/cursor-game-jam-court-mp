@@ -200,7 +200,7 @@
 - [x] Milestone C: Local single-case trial flow works with debug controls.
 - [x] Milestone D: Prosecutor and Defense can play cards and evidence.
 - [x] Milestone E: Judge can rule in bounded windows.
-- [ ] Milestone F: Jury can evaluate and vote.
+- [x] Milestone F: Jury can evaluate and vote.
 - [ ] Milestone G: AI can fill empty seats.
 - [ ] Milestone H: Multiplayer room flow works.
 - [ ] Milestone I: At least three complete cases are playable.
@@ -232,5 +232,5 @@
 - [ ] Ticket 6: Add JSON schema for one example case.
 - [ ] Ticket 7: Load the example case and show role-specific data.
 - [ ] Ticket 8: Add evidence panel and evidence reveal actions.
-- [ ] Ticket 9: Add judge ruling window and jury vote screen.
+- [x] Ticket 9: Add judge ruling window and jury vote screen.
 - [ ] Ticket 10: Replace placeholder content with one complete playable trial.

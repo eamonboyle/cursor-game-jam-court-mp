@@ -41,10 +41,12 @@ Planned top-level folders:
 | [`src/game/matchState.ts`](../src/game/matchState.ts) | `MatchState` model + initial factory. |
 | [`src/game/turnTimer.ts`](../src/game/turnTimer.ts) | Turn timer with pause / resume / expire ticks. |
 | [`src/game/phaseTransitions.ts`](../src/game/phaseTransitions.ts) | Allowed-edge map + `applyPhaseTransition`. |
-| [`src/game/matchController.ts`](../src/game/matchController.ts) | RAF loop, dev keys, listeners, visual sync, counsel play/evidence, judge `recordJudgeRuling`. |
+| [`src/game/matchController.ts`](../src/game/matchController.ts) | RAF loop, dev keys, listeners, visual sync, counsel, judge rulings, `castJuryVote`. |
 | [`src/game/counsel.ts`](../src/game/counsel.ts) | `CounselSide`, stub card/evidence definitions (Milestone D). |
 | [`src/game/judgeRulings.ts`](../src/game/judgeRulings.ts) | Bounded judge ruling IDs + `tryAppendJudgeRuling` (Milestone E). |
 | [`src/game/judgeRulings.test.ts`](../src/game/judgeRulings.test.ts) | Vitest for objection-only rulings palette. |
+| [`src/game/jury.ts`](../src/game/jury.ts) | Stub jury poll, `tryCastJuryVote`, verdict resolution (Milestone F). |
+| [`src/game/jury.test.ts`](../src/game/jury.test.ts) | Vitest for jury votes and majority / hung rules. |
 | [`src/game/phaseTransitions.test.ts`](../src/game/phaseTransitions.test.ts) | Vitest coverage for transition graph. |
 | [`src/data/loaders.ts`](../src/data/loaders.ts) | Placeholder for `/data` JSON load + validation. |
 | [`src/audio/audioBus.ts`](../src/audio/audioBus.ts) | Stub audio bus until Web Audio integration. |

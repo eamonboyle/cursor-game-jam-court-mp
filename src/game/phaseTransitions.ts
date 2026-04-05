@@ -1,3 +1,4 @@
+import { resolveVerdictFromVotes } from "./jury";
 import type { ActiveRole } from "./roles";
 import type { TrialPhase } from "./trialPhase";
 import {
@@ -79,12 +80,27 @@ export function applyPhaseTransition(
   timer.reset(DEFAULT_PHASE_MS);
   timer.resume();
 
+  let juryVotes = prevState.juryVotes;
+  let verdictOutcome = prevState.verdictOutcome;
+
+  if (target === "jury_deliberation") {
+    juryVotes = [];
+    verdictOutcome = null;
+  } else if (target === "verdict") {
+    verdictOutcome = resolveVerdictFromVotes(prevState.juryVotes);
+  } else if (target === "idle") {
+    juryVotes = [];
+    verdictOutcome = null;
+  }
+
   const next: MatchState = {
     ...prevState,
     phase: target,
     activeRole: defaultActiveRoleForPhase(target),
     currentWitnessId: defaultWitnessIdForPhase(target),
     turnTimer: timer.snapshot(),
+    juryVotes,
+    verdictOutcome,
   };
 
   return { ok: true, state: attachTimerSnapshot(next, timer), timer };

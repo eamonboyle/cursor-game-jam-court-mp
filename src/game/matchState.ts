@@ -1,5 +1,6 @@
 import type { PlayedCardEntry } from "./counsel";
 import type { JudgeRulingId } from "./judgeRulings";
+import type { JuryVoteEntry, VerdictOutcome } from "./jury";
 import type { ActiveRole } from "./roles";
 import type { TrialPhase } from "./trialPhase";
 import type { TurnTimerSnapshot } from "./turnTimer";
@@ -23,6 +24,10 @@ export type MatchState = {
   playedCards: readonly PlayedCardEntry[];
   jurySentiment: number;
   rulingHistory: readonly RulingEntry[];
+  /** Sealed when exiting deliberation into `verdict` (Milestone F). */
+  verdictOutcome: VerdictOutcome | null;
+  /** Cumulative poll during `jury_deliberation`; frozen after phase ends. */
+  juryVotes: readonly JuryVoteEntry[];
 };
 
 export const DEFAULT_PHASE_MS = 45_000;
@@ -39,6 +44,8 @@ export function createInitialMatchState(): { state: MatchState; timer: TurnTimer
     playedCards: [],
     jurySentiment: 0,
     rulingHistory: [],
+    verdictOutcome: null,
+    juryVotes: [],
   };
   return { state, timer };
 }
