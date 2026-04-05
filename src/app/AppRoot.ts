@@ -1,7 +1,7 @@
 import { createAudioBusStub } from "../audio/audioBus";
 import { dataLoadersPlaceholder } from "../data/loaders";
 import { mountDebugHud } from "../debug/hud";
-import { createGameSessionStub } from "../game/session";
+import { MatchController } from "../game/matchController";
 import { createStage } from "../rendering/stage";
 import { mountUiOverlay } from "../ui/overlay";
 
@@ -13,7 +13,9 @@ function requireElement<T extends HTMLElement>(id: string): T {
 
 export class AppRoot {
   private stageReturn: ReturnType<typeof createStage> | null = null;
+  private match: MatchController | null = null;
   private cleanupHud: (() => void) | null = null;
+  private cleanupUi: (() => void) | null = null;
 
   start(): void {
     const canvas = requireElement<HTMLCanvasElement>("canvas");
@@ -21,17 +23,26 @@ export class AppRoot {
     const debugRoot = requireElement<HTMLDivElement>("debug-root");
 
     this.stageReturn = createStage(canvas);
-    mountUiOverlay(uiRoot);
-    this.cleanupHud = mountDebugHud(debugRoot, this.stageReturn);
+    this.match = new MatchController(this.stageReturn.sceneState, () => {
+      this.stageReturn?.refreshCamera();
+    });
 
-    createGameSessionStub();
+    this.cleanupUi = mountUiOverlay(uiRoot, this.match);
+    this.cleanupHud = mountDebugHud(debugRoot, this.stageReturn, this.match);
+
     void dataLoadersPlaceholder();
     void createAudioBusStub();
+
+    this.match.start();
   }
 
   dispose(): void {
     this.cleanupHud?.();
     this.cleanupHud = null;
+    this.cleanupUi?.();
+    this.cleanupUi = null;
+    this.match?.dispose();
+    this.match = null;
     this.stageReturn?.dispose();
     this.stageReturn = null;
   }

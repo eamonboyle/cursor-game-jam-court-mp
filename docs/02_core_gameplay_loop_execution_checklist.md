@@ -12,8 +12,8 @@
 - Prevent hidden or ad hoc state transitions.
 
 ### Checklist
-- [ ] Phase 1, Step 1: Define the full trial phase enum in TypeScript.
-- [ ] Phase 1, Step 2: Create a `MatchState` model containing:
+- [x] Phase 1, Step 1: Define the full trial phase enum in TypeScript.
+- [x] Phase 1, Step 2: Create a `MatchState` model containing:
   - current phase
   - active role
   - turn timer
@@ -21,14 +21,14 @@
   - current evidence stack
   - jury sentiment
   - ruling history
-- [ ] Phase 1, Step 3: Create a central phase transition function.
-- [ ] Phase 1, Step 4: Add validation so invalid transitions are rejected.
-- [ ] Phase 1, Step 5: Create dev tools to manually jump between phases.
-- [ ] Phase 1, Step 6: Log all phase transitions in debug mode.
-- [ ] Phase 1, Step 7: Add UI text showing current phase and active player.
-- [ ] Phase 1, Step 8: Add a timer model that can pause, resume, and expire.
-- [ ] Phase 1, Step 9: Define end-of-phase callbacks for cleanup.
-- [ ] Phase 1, Step 10: Write a unit-tested phase transition map.
+- [x] Phase 1, Step 3: Create a central phase transition function.
+- [x] Phase 1, Step 4: Add validation so invalid transitions are rejected.
+- [x] Phase 1, Step 5: Create dev tools to manually jump between phases.
+- [x] Phase 1, Step 6: Log all phase transitions in debug mode.
+- [x] Phase 1, Step 7: Add UI text showing current phase and active player.
+- [x] Phase 1, Step 8: Add a timer model that can pause, resume, and expire.
+- [x] Phase 1, Step 9: Define end-of-phase callbacks for cleanup.
+- [x] Phase 1, Step 10: Write a unit-tested phase transition map.
 
 ### Exit criteria
 - Every trial phase is explicit.

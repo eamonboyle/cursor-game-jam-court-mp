@@ -51,6 +51,30 @@ body {
   text-shadow: 0 1px 2px rgb(0 0 0 / 80%);
 }
 
+.trial-panel {
+  margin-top: 12px;
+  max-width: 22rem;
+  padding: 10px 12px;
+  pointer-events: auto;
+  background: rgb(0 0 0 / 55%);
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.trial-panel p {
+  margin: 4px 0;
+}
+
+.trial-panel kbd {
+  padding: 1px 5px;
+  font-size: 0.72rem;
+  border-radius: 3px;
+  border: 1px solid rgb(255 255 255 / 25%);
+  background: rgb(0 0 0 / 35%);
+}
+
 #ui-root > * {
   pointer-events: auto;
 }

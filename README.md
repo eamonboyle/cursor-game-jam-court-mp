@@ -27,9 +27,10 @@ npm run build    # Typecheck + production bundle to dist/
 npm run preview  # Serve dist/
 npm run lint
 npm run typecheck
+npm run test      # Vitest (phase transition unit tests)
 ```
 
-Vision Phases 0–4 are documented; **Milestone B** (placeholder courtroom in Three.js) is complete — see [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md). Next: **Milestone C** (local trial flow + debug) per [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md) and [`docs/production_sequencing.md`](docs/production_sequencing.md).
+**Milestones A–C** are complete (boot, placeholder courtroom, local trial phase machine + debug). See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone D** — counsel cards and evidence.
 
 ## Contributing / agents
 

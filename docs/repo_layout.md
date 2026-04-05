@@ -25,7 +25,7 @@ Planned top-level folders:
 | [`src/main.ts`](../src/main.ts) | Application entry only: CSS import + `createApp().start()`. |
 | [`src/style.css`](../src/style.css) | Full-viewport layout: `#canvas`, `#ui-root`, `#debug-root`. |
 | [`src/app/bootstrap.ts`](../src/app/bootstrap.ts) | `createApp()` — installs global error handlers, returns `AppRoot`. |
-| [`src/app/AppRoot.ts`](../src/app/AppRoot.ts) | Composes Three.js stage, UI overlay, debug HUD, and stub domains. |
+| [`src/app/AppRoot.ts`](../src/app/AppRoot.ts) | Wires `MatchController`, Three.js stage, overlay, and debug HUD. |
 | [`src/app/installGlobalErrorHandlers.ts`](../src/app/installGlobalErrorHandlers.ts) | Fail-safe `error` / `unhandledrejection` console logging. |
 | [`src/rendering/stage.ts`](../src/rendering/stage.ts) | Composes renderer, courtroom placeholder scene, cinematic cameras, loop, dev hotkeys. |
 | [`src/rendering/rendererBootstrap.ts`](../src/rendering/rendererBootstrap.ts) | WebGL renderer factory (color space, DPR). |
@@ -33,10 +33,16 @@ Planned top-level folders:
 | [`src/rendering/camera/cinematicPresets.ts`](../src/rendering/camera/cinematicPresets.ts) | Named fixed camera positions for the single courtroom. |
 | [`src/rendering/seats/roleAnchors.ts`](../src/rendering/seats/roleAnchors.ts) | In-scene anchors for judge, counsel, witness, jury, defendant. |
 | [`src/rendering/characters/roleCapsules.ts`](../src/rendering/characters/roleCapsules.ts) | Colored capsule stand-ins before authored characters. |
-| [`src/rendering/courtroomSceneState.ts`](../src/rendering/courtroomSceneState.ts) | Maps stub trial phase + speaker → suggested camera preset. |
-| [`src/ui/overlay.ts`](../src/ui/overlay.ts) | Mounts placeholder overlay markup into `#ui-root`. |
-| [`src/debug/hud.ts`](../src/debug/hud.ts) | Live debug readout; returns dispose for `AppRoot`. |
-| [`src/game/session.ts`](../src/game/session.ts) | Stub game session until match / trial state exists. |
+| [`src/rendering/courtroomSceneState.ts`](../src/rendering/courtroomSceneState.ts) | Trial `phase` + `activeSpeaker` → cinematic camera preset. |
+| [`src/ui/overlay.ts`](../src/ui/overlay.ts) | UI shell + live trial readout bound to `MatchController`. |
+| [`src/debug/hud.ts`](../src/debug/hud.ts) | Combined Three.js + trial debug HUD. |
+| [`src/game/trialPhase.ts`](../src/game/trialPhase.ts) | Canonical `TrialPhase` union + ordering. |
+| [`src/game/roles.ts`](../src/game/roles.ts) | `ActiveRole` for who may speak / highlight. |
+| [`src/game/matchState.ts`](../src/game/matchState.ts) | `MatchState` model + initial factory. |
+| [`src/game/turnTimer.ts`](../src/game/turnTimer.ts) | Turn timer with pause / resume / expire ticks. |
+| [`src/game/phaseTransitions.ts`](../src/game/phaseTransitions.ts) | Allowed-edge map + `applyPhaseTransition`. |
+| [`src/game/matchController.ts`](../src/game/matchController.ts) | RAF loop, dev keys, listeners, visual sync. |
+| [`src/game/phaseTransitions.test.ts`](../src/game/phaseTransitions.test.ts) | Vitest coverage for transition graph. |
 | [`src/data/loaders.ts`](../src/data/loaders.ts) | Placeholder for `/data` JSON load + validation. |
 | [`src/audio/audioBus.ts`](../src/audio/audioBus.ts) | Stub audio bus until Web Audio integration. |
 | [`index.html`](../index.html) | DOM roots: `#canvas`, `#ui-root`, `#debug-root`. |

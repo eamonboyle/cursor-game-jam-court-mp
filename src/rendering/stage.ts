@@ -19,6 +19,7 @@ export type StageHandles = {
   camera: THREE.PerspectiveCamera;
   sceneState: CourtroomSceneState;
   getCameraLabel: () => string;
+  refreshCamera: () => void;
   dispose: () => void;
 };
 
@@ -47,8 +48,6 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
   scene.add(courtroom);
 
   const sceneState = new CourtroomSceneState();
-  sceneState.setPhase("opening");
-  sceneState.setActiveSpeaker("judge");
 
   let manualPreset: CameraPresetId | null = null;
   const presetIds = listCameraPresetIds();
@@ -63,7 +62,11 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
     return manualPreset ? `manual:${preset}` : `auto:${preset}`;
   };
 
-  syncCamera();
+  const refreshCamera = (): void => {
+    syncCamera();
+  };
+
+  refreshCamera();
 
   const onKeyDown = (e: KeyboardEvent): void => {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)
@@ -107,6 +110,7 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
     camera,
     sceneState,
     getCameraLabel,
+    refreshCamera,
     dispose: (): void => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);

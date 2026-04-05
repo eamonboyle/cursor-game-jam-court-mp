@@ -197,7 +197,7 @@
 ### Checklist
 - [x] Milestone A: Bootable scene with Three.js canvas and UI overlay.
 - [x] Milestone B: Courtroom scene renders with placeholder assets.
-- [ ] Milestone C: Local single-case trial flow works with debug controls.
+- [x] Milestone C: Local single-case trial flow works with debug controls.
 - [ ] Milestone D: Prosecutor and Defense can play cards and evidence.
 - [ ] Milestone E: Judge can rule in bounded windows.
 - [ ] Milestone F: Jury can evaluate and vote.
@@ -227,7 +227,7 @@
 - [ ] Ticket 1: Bootstrap Vite TypeScript project with Three.js canvas and overlay root.
 - [ ] Ticket 2: Create shared app layout and renderer bootstrap.
 - [x] Ticket 3: Add courtroom scene placeholder geometry and fixed cameras.
-- [ ] Ticket 4: Add debug phase controller for a fake trial.
+- [x] Ticket 4: Add debug phase controller for a fake trial.
 - [ ] Ticket 5: Add card panel and simple action selection UI.
 - [ ] Ticket 6: Add JSON schema for one example case.
 - [ ] Ticket 7: Load the example case and show role-specific data.

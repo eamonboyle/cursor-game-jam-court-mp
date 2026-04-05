@@ -10,9 +10,9 @@
 | Field                    | Value                                                                                                                                                                                                     |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
-| **Active track**         | Vision Phase 5 **milestones** + advancing [`docs/04_technical_architecture_execution_checklist.md`](docs/04_technical_architecture_execution_checklist.md) (Phase 3+ after gameplay state).              |
-| **Current phase / step** | **Milestone B** complete; **next: Milestone C** — local single-case trial flow with debug controls.                                                                                                     |
-| **Next action**          | Follow [`docs/production_sequencing.md`](docs/production_sequencing.md); implement trial phase state + debug controller (Vision **Ticket 4** / gameplay loop checklist).                                   |
+| **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
+| **Current phase / step** | **Milestone C** complete; **next: Milestone D** — Prosecutor/Defense cards + evidence actions.                                                                                                             |
+| **Next action**          | Follow [`docs/production_sequencing.md`](docs/production_sequencing.md); gameplay Phase 2+ or Vision **Ticket 5** (card panel) as appropriate.                                                             |
 
 
 **Blockers:** none.
@@ -58,6 +58,12 @@ Do **not** paste full checklists into this file.
 - **Next:** …
 - **Blockers / decisions:** …
 ```
+
+### 2026-04-06 — Milestone C trial state machine + debug
+
+- **Done:** `MatchState`, `TurnTimer`, `phaseTransitions` + Vitest tests, `MatchController` (] legal, [ \\ dev cycle, console logs), UI trial panel, HUD + camera refresh on visual sync; Gameplay loop Phase 1 checklist complete; Milestone C + Ticket 4; removed unused `session` stub.
+- **Next:** Milestone D / card + evidence UI and actions.
+- **Blockers / decisions:** none.
 
 ### 2026-04-06 — Milestone B courtroom + Tech arch Phase 2
 
