@@ -2,6 +2,8 @@ import type { PlayedCardEntry } from "./counsel";
 import type { JudgeRulingId } from "./judgeRulings";
 import type { JuryVoteEntry, VerdictOutcome } from "./jury";
 import type { ActiveRole } from "./roles";
+import type { SeatFillMap } from "./seatFill";
+import { createAllHumanSeatFill } from "./seatFill";
 import type { TrialPhase } from "./trialPhase";
 import type { TurnTimerSnapshot } from "./turnTimer";
 import { TurnTimer } from "./turnTimer";
@@ -28,6 +30,14 @@ export type MatchState = {
   verdictOutcome: VerdictOutcome | null;
   /** Cumulative poll during `jury_deliberation`; frozen after phase ends. */
   juryVotes: readonly JuryVoteEntry[];
+  /** Milestone G — AI vs human per seat. */
+  seatFill: SeatFillMap;
+  /** One-shot AI actions per phase; reset on every phase transition. */
+  aiLatch: {
+    judgeObjection: boolean;
+    prosecutionCard: boolean;
+    defenseCard: boolean;
+  };
 };
 
 export const DEFAULT_PHASE_MS = 45_000;
@@ -46,6 +56,12 @@ export function createInitialMatchState(): { state: MatchState; timer: TurnTimer
     rulingHistory: [],
     verdictOutcome: null,
     juryVotes: [],
+    seatFill: createAllHumanSeatFill(),
+    aiLatch: {
+      judgeObjection: false,
+      prosecutionCard: false,
+      defenseCard: false,
+    },
   };
   return { state, timer };
 }

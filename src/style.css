@@ -75,10 +75,46 @@ body {
   background: rgb(0 0 0 / 35%);
 }
 
-.jury-panel {
+.ai-seat-panel {
   margin-top: 12px;
-  max-width: min(640px, 100%);
+  max-width: min(420px, 100%);
   pointer-events: auto;
+  padding: 10px 12px;
+  background: rgb(0 0 0 / 4%);
+  border: 1px solid rgb(120 200 255 / 22%);
+  border-radius: 6px;
+}
+
+.ai-seat-hint {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  opacity: 0.82;
+  line-height: 1.35;
+}
+
+.ai-seat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  margin-bottom: 10px;
+  font-size: 0.78rem;
+}
+
+.ai-seat-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.ai-preset-btn {
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  border-radius: 5px;
+  border: 1px solid rgb(255 255 255 / 22%);
+  color: inherit;
+  background: rgb(0 0 0 / 35%);
 }
 
 .jury-panel-hint {

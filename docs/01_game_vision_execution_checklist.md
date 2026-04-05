@@ -201,7 +201,7 @@
 - [x] Milestone D: Prosecutor and Defense can play cards and evidence.
 - [x] Milestone E: Judge can rule in bounded windows.
 - [x] Milestone F: Jury can evaluate and vote.
-- [ ] Milestone G: AI can fill empty seats.
+- [x] Milestone G: AI can fill empty seats.
 - [ ] Milestone H: Multiplayer room flow works.
 - [ ] Milestone I: At least three complete cases are playable.
 - [ ] Milestone J: Browser-ready MVP build is stable and readable.

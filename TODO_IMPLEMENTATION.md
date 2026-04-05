@@ -11,8 +11,8 @@
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
 | **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
-| **Current phase / step** | **Milestone F** complete; **next: Milestone G** — AI-filled seats.                                                                                                                                       |
-| **Next action**          | Stub AI juror/counsel behavior and seat assignment; follow [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) Milestone G and gameplay Phase 8 where relevant.      |
+| **Current phase / step** | **Milestone G** complete; **next: Milestone H** — multiplayer room flow.                                                                                                                                   |
+| **Next action**          | Room schema and command channel (Colyseus-class); follow [`docs/04_technical_architecture_execution_checklist.md`](docs/04_technical_architecture_execution_checklist.md) Phase 8 and vision Milestone H. |
 
 
 **Blockers:** none.
@@ -58,6 +58,12 @@ Do **not** paste full checklists into this file.
 - **Next:** …
 - **Blockers / decisions:** …
 ```
+
+### 2026-04-06 — Milestone G AI seat fill (local)
+
+- **Done:** `SeatFillMap` + `aiLatch` on `MatchState`; `runAiSeatFill` drives jury poll, objection ruling, and exam/cross counsel cards when seats are AI; overlay checkboxes + jam solo preset; UI disables human controls for AI seats; `ai/seatBehavior` + Vitest.
+- **Next:** Milestone H (minimal room / sync).
+- **Blockers / decisions:** No network yet — bots are deterministic client-side stubs; server should own seat fill later per tech arch.
 
 ### 2026-04-06 — Milestone F jury deliberation and verdict tally
 

@@ -10,6 +10,7 @@ import {
 } from "../game/jury";
 import { BOUNDED_JUDGE_RULINGS } from "../game/judgeRulings";
 import type { MatchController } from "../game/matchController";
+import { createJamSoloSeatFill } from "../game/seatFill";
 
 function formatMs(ms: number): string {
   return `${Math.ceil(ms / 1000)}s`;
@@ -48,6 +49,27 @@ function wireCounselButtons(
     btn.addEventListener("click", () => match.revealEvidence(item.id));
     ev.appendChild(btn);
   }
+}
+
+function wireAiSeatPanel(root: HTMLElement, match: MatchController): void {
+  const pro = root.querySelector<HTMLInputElement>("#ai-seat-pro");
+  const def = root.querySelector<HTMLInputElement>("#ai-seat-def");
+  const judge = root.querySelector<HTMLInputElement>("#ai-seat-judge");
+  const jury = root.querySelector<HTMLInputElement>("#ai-seat-jury");
+  const preset = root.querySelector<HTMLButtonElement>("#ai-preset-jam-solo");
+  pro?.addEventListener("change", () => {
+    match.patchSeatFill({ prosecution: pro.checked ? "ai" : "human" });
+  });
+  def?.addEventListener("change", () => {
+    match.patchSeatFill({ defense: def.checked ? "ai" : "human" });
+  });
+  judge?.addEventListener("change", () => {
+    match.patchSeatFill({ judge: judge.checked ? "ai" : "human" });
+  });
+  jury?.addEventListener("change", () => {
+    match.patchSeatFill({ jury: jury.checked ? "ai" : "human" });
+  });
+  preset?.addEventListener("click", () => match.setSeatFill(createJamSoloSeatFill()));
 }
 
 function wireJuryVoteButtons(root: HTMLElement, match: MatchController): void {
@@ -92,6 +114,18 @@ export function mountUiOverlay(
         <p class="trial-log">Last ruling: <span id="last-ruling">—</span></p>
         <p class="trial-log">Jury poll: <span id="jury-poll-summary">—</span></p>
         <p class="trial-log">Verdict: <span id="verdict-outcome">—</span></p>
+        <p class="trial-log">AI seats: <span id="seat-fill-summary">—</span></p>
+      </div>
+      <div class="ai-seat-panel" aria-label="AI seat fill">
+        <h3 class="counsel-heading">AI seats</h3>
+        <p class="ai-seat-hint">Checked roles are driven by deterministic local bots. Preset = jam solo (AI judge + jury).</p>
+        <div class="ai-seat-grid">
+          <label class="ai-seat-label"><input type="checkbox" id="ai-seat-pro" /> Prosecution</label>
+          <label class="ai-seat-label"><input type="checkbox" id="ai-seat-def" /> Defense</label>
+          <label class="ai-seat-label"><input type="checkbox" id="ai-seat-judge" /> Judge</label>
+          <label class="ai-seat-label"><input type="checkbox" id="ai-seat-jury" /> Jury</label>
+        </div>
+        <button type="button" id="ai-preset-jam-solo" class="ai-preset-btn">Preset: AI judge + jury</button>
       </div>
       <div class="jury-panel" aria-label="Jury deliberation votes">
         <h3 class="counsel-heading">Jury</h3>
@@ -124,6 +158,7 @@ export function mountUiOverlay(
   `;
 
   wireCounselButtons(container, match);
+  wireAiSeatPanel(container, match);
   wireJuryVoteButtons(container, match);
   wireJudgeRulingButtons(container, match);
 
@@ -136,6 +171,11 @@ export function mountUiOverlay(
   const rulingEl = container.querySelector("#last-ruling");
   const pollEl = container.querySelector("#jury-poll-summary");
   const verdictEl = container.querySelector("#verdict-outcome");
+  const seatFillEl = container.querySelector("#seat-fill-summary");
+  const aiPro = container.querySelector<HTMLInputElement>("#ai-seat-pro");
+  const aiDef = container.querySelector<HTMLInputElement>("#ai-seat-def");
+  const aiJudge = container.querySelector<HTMLInputElement>("#ai-seat-judge");
+  const aiJury = container.querySelector<HTMLInputElement>("#ai-seat-jury");
 
   const render = (): void => {
     const s = match.getState();
@@ -177,23 +217,41 @@ export function mountUiOverlay(
     if (verdictEl) {
       verdictEl.textContent = s.verdictOutcome ? formatVerdictOutcome(s.verdictOutcome) : "—";
     }
+    if (seatFillEl) {
+      const tags: string[] = [];
+      if (s.seatFill.prosecution === "ai") tags.push("prosecution");
+      if (s.seatFill.defense === "ai") tags.push("defense");
+      if (s.seatFill.judge === "ai") tags.push("judge");
+      if (s.seatFill.jury === "ai") tags.push("jury");
+      seatFillEl.textContent = tags.length === 0 ? "all human" : tags.join(", ");
+    }
+    if (aiPro) aiPro.checked = s.seatFill.prosecution === "ai";
+    if (aiDef) aiDef.checked = s.seatFill.defense === "ai";
+    if (aiJudge) aiJudge.checked = s.seatFill.judge === "ai";
+    if (aiJury) aiJury.checked = s.seatFill.jury === "ai";
 
     const objection = s.phase === "objection";
     const deliberation = s.phase === "jury_deliberation";
     const verdictPhase = s.phase === "verdict";
     const pollFull = s.juryVotes.length >= JUROR_COUNT;
 
-    for (const btn of container.querySelectorAll<HTMLButtonElement>(
-      ".counsel-card-btn, .evidence-btn",
-    )) {
+    for (const btn of container.querySelectorAll<HTMLButtonElement>(".counsel-card-btn--pro")) {
+      btn.disabled =
+        objection || deliberation || verdictPhase || s.seatFill.prosecution === "ai";
+    }
+    for (const btn of container.querySelectorAll<HTMLButtonElement>(".counsel-card-btn--def")) {
+      btn.disabled =
+        objection || deliberation || verdictPhase || s.seatFill.defense === "ai";
+    }
+    for (const btn of container.querySelectorAll<HTMLButtonElement>(".evidence-btn")) {
       btn.disabled = objection || deliberation || verdictPhase;
     }
     for (const btn of container.querySelectorAll<HTMLButtonElement>(".judge-ruling-btn")) {
-      btn.disabled = !objection;
+      btn.disabled = !objection || s.seatFill.judge === "ai";
     }
     for (const sel of ["#jury-vote-guilty", "#jury-vote-not-guilty"] as const) {
       const btn = container.querySelector<HTMLButtonElement>(sel);
-      if (btn) btn.disabled = !deliberation || pollFull;
+      if (btn) btn.disabled = !deliberation || pollFull || s.seatFill.jury === "ai";
     }
   };
 

@@ -101,6 +101,11 @@ export function applyPhaseTransition(
     turnTimer: timer.snapshot(),
     juryVotes,
     verdictOutcome,
+    aiLatch: {
+      judgeObjection: false,
+      prosecutionCard: false,
+      defenseCard: false,
+    },
   };
 
   return { ok: true, state: attachTimerSnapshot(next, timer), timer };

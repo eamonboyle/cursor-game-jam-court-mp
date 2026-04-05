@@ -30,7 +30,7 @@ npm run typecheck
 npm run test      # Vitest (phase transition unit tests)
 ```
 
-**Milestones A–F** are complete through counsel actions, judge rulings, and a six-vote jury poll with sealed verdict readout. See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone G** — AI-filled seats.
+**Milestones A–G** are complete through counsel actions, judge rulings, jury verdict, and **local AI seat fill** (toggle per role + jam solo preset). See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone H** — multiplayer room flow.
 
 ## Contributing / agents
 
