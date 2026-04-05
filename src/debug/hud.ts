@@ -6,7 +6,14 @@ export function mountDebugHud(
 ): () => void {
   const tick = (): void => {
     const { x, y, z } = stage.camera.position;
-    container.textContent = `debug: camera (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)})`;
+    const cam = stage.getCameraLabel();
+    const { phase, activeSpeaker } = stage.sceneState;
+    container.textContent = [
+      `cam: ${cam}`,
+      `trial: ${phase} · speaker: ${activeSpeaker}`,
+      `pos: (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)})`,
+      `keys: 1–6 preset · 0 auto`,
+    ].join("\n");
   };
 
   tick();

@@ -1,35 +1,83 @@
 import * as THREE from "three";
+import {
+  applyCameraPreset,
+  listCameraPresetIds,
+  type CameraPresetId,
+} from "./camera/cinematicPresets";
+import { addRoleCapsules } from "./characters/roleCapsules";
+import {
+  buildCourtroomPlaceholderRoot,
+  disposeCourtroomPlaceholder,
+} from "./courtroom/buildCourtroomPlaceholder";
+import { CourtroomSceneState } from "./courtroomSceneState";
+import { createWebGLRenderer } from "./rendererBootstrap";
+import { createSeatAnchors } from "./seats/roleAnchors";
 
 export type StageHandles = {
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
+  sceneState: CourtroomSceneState;
+  getCameraLabel: () => string;
   dispose: () => void;
 };
 
 /**
- * Minimal Three.js stage: neutral background, one lit mesh, resize-safe render loop.
+ * Milestone B: placeholder courtroom, seat anchors, capsules, fixed camera presets, scene state stub.
  */
 export function createStage(canvas: HTMLCanvasElement): StageHandles {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
+  const renderer = createWebGLRenderer(canvas);
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x1a1a24);
+  scene.fog = new THREE.Fog(0x1a1a24, 18, 55);
 
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-  camera.position.set(2.2, 1.6, 3.2);
-  camera.lookAt(0, 0, 0);
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 120);
 
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshStandardMaterial({ color: 0x8899aa });
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
+  const ambient = new THREE.AmbientLight(0xffffff, 0.52);
+  const key = new THREE.DirectionalLight(0xfff2dd, 1.05);
+  key.position.set(-6, 14, 8);
+  const fill = new THREE.DirectionalLight(0xccd8ff, 0.35);
+  fill.position.set(8, 8, -4);
+  scene.add(ambient, key, fill);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.45);
-  const directional = new THREE.DirectionalLight(0xffffff, 1.1);
-  directional.position.set(3, 5, 2);
-  scene.add(ambient, directional);
+  const courtroom = buildCourtroomPlaceholderRoot();
+  const anchors = createSeatAnchors(courtroom);
+  addRoleCapsules(anchors);
+
+  scene.add(courtroom);
+
+  const sceneState = new CourtroomSceneState();
+  sceneState.setPhase("opening");
+  sceneState.setActiveSpeaker("judge");
+
+  let manualPreset: CameraPresetId | null = null;
+  const presetIds = listCameraPresetIds();
+
+  const syncCamera = (): void => {
+    const preset = manualPreset ?? sceneState.getSuggestedCameraPreset();
+    applyCameraPreset(camera, preset);
+  };
+
+  const getCameraLabel = (): string => {
+    const preset = manualPreset ?? sceneState.getSuggestedCameraPreset();
+    return manualPreset ? `manual:${preset}` : `auto:${preset}`;
+  };
+
+  syncCamera();
+
+  const onKeyDown = (e: KeyboardEvent): void => {
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)
+      return;
+    const n = Number(e.key);
+    if (e.key === "0") {
+      manualPreset = null;
+      syncCamera();
+    } else if (Number.isInteger(n) && n >= 1 && n <= presetIds.length) {
+      manualPreset = presetIds[n - 1] ?? "wide";
+      if (manualPreset) applyCameraPreset(camera, manualPreset);
+    }
+  };
+  window.addEventListener("keydown", onKeyDown);
 
   const resize = (): void => {
     const width = canvas.clientWidth;
@@ -47,8 +95,7 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
 
   const tick = (): void => {
     rafId = requestAnimationFrame(tick);
-    const dt = clock.getDelta();
-    mesh.rotation.y += dt * 0.35;
+    void clock.getDelta();
     renderer.render(scene, camera);
   };
 
@@ -58,11 +105,14 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
     renderer,
     scene,
     camera,
+    sceneState,
+    getCameraLabel,
     dispose: (): void => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
-      geometry.dispose();
-      material.dispose();
+      window.removeEventListener("keydown", onKeyDown);
+      scene.remove(courtroom);
+      disposeCourtroomPlaceholder(courtroom);
       renderer.dispose();
     },
   };

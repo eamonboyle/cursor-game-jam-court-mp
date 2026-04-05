@@ -27,7 +27,13 @@ Planned top-level folders:
 | [`src/app/bootstrap.ts`](../src/app/bootstrap.ts) | `createApp()` — installs global error handlers, returns `AppRoot`. |
 | [`src/app/AppRoot.ts`](../src/app/AppRoot.ts) | Composes Three.js stage, UI overlay, debug HUD, and stub domains. |
 | [`src/app/installGlobalErrorHandlers.ts`](../src/app/installGlobalErrorHandlers.ts) | Fail-safe `error` / `unhandledrejection` console logging. |
-| [`src/rendering/stage.ts`](../src/rendering/stage.ts) | Renderer, scene, camera, neutral background + smoke-test mesh, resize, animation loop. |
+| [`src/rendering/stage.ts`](../src/rendering/stage.ts) | Composes renderer, courtroom placeholder scene, cinematic cameras, loop, dev hotkeys. |
+| [`src/rendering/rendererBootstrap.ts`](../src/rendering/rendererBootstrap.ts) | WebGL renderer factory (color space, DPR). |
+| [`src/rendering/courtroom/buildCourtroomPlaceholder.ts`](../src/rendering/courtroom/buildCourtroomPlaceholder.ts) | PS1-style labeled prop/floor/wall placeholders. |
+| [`src/rendering/camera/cinematicPresets.ts`](../src/rendering/camera/cinematicPresets.ts) | Named fixed camera positions for the single courtroom. |
+| [`src/rendering/seats/roleAnchors.ts`](../src/rendering/seats/roleAnchors.ts) | In-scene anchors for judge, counsel, witness, jury, defendant. |
+| [`src/rendering/characters/roleCapsules.ts`](../src/rendering/characters/roleCapsules.ts) | Colored capsule stand-ins before authored characters. |
+| [`src/rendering/courtroomSceneState.ts`](../src/rendering/courtroomSceneState.ts) | Maps stub trial phase + speaker → suggested camera preset. |
 | [`src/ui/overlay.ts`](../src/ui/overlay.ts) | Mounts placeholder overlay markup into `#ui-root`. |
 | [`src/debug/hud.ts`](../src/debug/hud.ts) | Live debug readout; returns dispose for `AppRoot`. |
 | [`src/game/session.ts`](../src/game/session.ts) | Stub game session until match / trial state exists. |

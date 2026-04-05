@@ -38,16 +38,16 @@
 - Support one main courtroom scene with fixed cameras.
 
 ### Checklist
-- [ ] Phase 2, Step 1: Create a renderer bootstrap module.
-- [ ] Phase 2, Step 2: Create a scene bootstrap module.
-- [ ] Phase 2, Step 3: Create a camera controller supporting fixed cinematic presets.
-- [ ] Phase 2, Step 4: Add a main animation loop with delta time.
-- [ ] Phase 2, Step 5: Add a resize-safe renderer and camera update path.
-- [ ] Phase 2, Step 6: Add lighting suitable for PS1-style readability.
-- [ ] Phase 2, Step 7: Add courtroom placeholder meshes first.
-- [ ] Phase 2, Step 8: Add seat anchors for each role.
-- [ ] Phase 2, Step 9: Add simple character placeholders or capsules before real models.
-- [ ] Phase 2, Step 10: Add a scene state controller that reacts to trial phase and active speaker.
+- [x] Phase 2, Step 1: Create a renderer bootstrap module.
+- [x] Phase 2, Step 2: Create a scene bootstrap module.
+- [x] Phase 2, Step 3: Create a camera controller supporting fixed cinematic presets.
+- [x] Phase 2, Step 4: Add a main animation loop with delta time.
+- [x] Phase 2, Step 5: Add a resize-safe renderer and camera update path.
+- [x] Phase 2, Step 6: Add lighting suitable for PS1-style readability.
+- [x] Phase 2, Step 7: Add courtroom placeholder meshes first.
+- [x] Phase 2, Step 8: Add seat anchors for each role.
+- [x] Phase 2, Step 9: Add simple character placeholders or capsules before real models.
+- [x] Phase 2, Step 10: Add a scene state controller that reacts to trial phase and active speaker.
 
 ### Exit criteria
 - Courtroom scene renders reliably.

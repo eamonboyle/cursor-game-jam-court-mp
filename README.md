@@ -29,7 +29,7 @@ npm run lint
 npm run typecheck
 ```
 
-Vision Phases 0–4 are complete through production sequencing (see [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md)). Next focus: **Milestone B** — courtroom with placeholder assets, following [`docs/production_sequencing.md`](docs/production_sequencing.md) ([`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md)).
+Vision Phases 0–4 are documented; **Milestone B** (placeholder courtroom in Three.js) is complete — see [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md). Next: **Milestone C** (local trial flow + debug) per [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md) and [`docs/production_sequencing.md`](docs/production_sequencing.md).
 
 ## Contributing / agents
 

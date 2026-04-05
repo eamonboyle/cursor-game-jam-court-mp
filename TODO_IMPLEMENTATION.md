@@ -10,9 +10,9 @@
 | Field                    | Value                                                                                                                                                                                                     |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
-| **Active track**         | Vision Phase 5 **milestones** + [`docs/04_technical_architecture_execution_checklist.md`](docs/04_technical_architecture_execution_checklist.md) implementation.                                            |
-| **Current phase / step** | Vision Phase 4 complete; **next: Milestone B** — courtroom scene with placeholder assets.                                                                                                              |
-| **Next action**          | Follow [`docs/production_sequencing.md`](docs/production_sequencing.md); implement Tech arch **Phase 2** (Three.js courtroom placeholders) toward Milestone B.                                          |
+| **Active track**         | Vision Phase 5 **milestones** + advancing [`docs/04_technical_architecture_execution_checklist.md`](docs/04_technical_architecture_execution_checklist.md) (Phase 3+ after gameplay state).              |
+| **Current phase / step** | **Milestone B** complete; **next: Milestone C** — local single-case trial flow with debug controls.                                                                                                     |
+| **Next action**          | Follow [`docs/production_sequencing.md`](docs/production_sequencing.md); implement trial phase state + debug controller (Vision **Ticket 4** / gameplay loop checklist).                                   |
 
 
 **Blockers:** none.
@@ -58,6 +58,12 @@ Do **not** paste full checklists into this file.
 - **Next:** …
 - **Blockers / decisions:** …
 ```
+
+### 2026-04-06 — Milestone B courtroom + Tech arch Phase 2
+
+- **Done:** Modular rendering (`rendererBootstrap`, placeholder courtroom props/walls, `CourtroomSceneState`, cinematic presets, seat anchors, role capsules); HUD + keys **1–6** camera presets / **0** auto; Milestone B + Tech Phase 2 + suggested Ticket 3 marked complete; [`docs/repo_layout.md`](docs/repo_layout.md) table updated.
+- **Next:** Milestone C — local trial flow + debug phase controller ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md) Phase 1).
+- **Blockers / decisions:** none.
 
 ### 2026-04-06 — Vision Phase 4 production sequencing
 
