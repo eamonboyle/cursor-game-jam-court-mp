@@ -30,7 +30,7 @@ npm run typecheck
 npm run test      # Vitest (phase transition unit tests)
 ```
 
-**Milestones A–C** are complete (boot, placeholder courtroom, local trial phase machine + debug). See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone D** — counsel cards and evidence.
+**Milestones A–D** are complete through counsel card + evidence stubs. See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone E** — judge rulings.
 
 ## Contributing / agents
 

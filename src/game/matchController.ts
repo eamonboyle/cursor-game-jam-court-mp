@@ -1,4 +1,5 @@
 import type { CourtroomSceneState } from "../rendering/courtroomSceneState";
+import type { CounselSide } from "./counsel";
 import {
   applyPhaseTransition,
   listLegalNextPhases,
@@ -112,6 +113,29 @@ export class MatchController {
     const target = TRIAL_PHASES[nextIdx];
     if (!target) return;
     void this.requestTransition(target, { force: true });
+  }
+
+  /** Milestone D — structured counsel action (local only). */
+  playCard(side: CounselSide, cardId: string): void {
+    this.state = {
+      ...this.state,
+      playedCards: [
+        ...this.state.playedCards,
+        { side, cardId, atMs: performance.now() },
+      ],
+    };
+    if (this.debugTransitions) console.debug("[trial] card", side, cardId);
+    this.emit();
+  }
+
+  revealEvidence(evidenceId: string): void {
+    if (this.state.evidenceStack.includes(evidenceId)) return;
+    this.state = {
+      ...this.state,
+      evidenceStack: [...this.state.evidenceStack, evidenceId],
+    };
+    if (this.debugTransitions) console.debug("[trial] evidence", evidenceId);
+    this.emit();
   }
 
   private readonly tick = (ts: number): void => {

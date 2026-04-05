@@ -8,16 +8,18 @@ export type CameraPresetId =
   | "prosecution"
   | "defense";
 
+/** All positions are *inside* the room (roughly z ∈ [-7.5, 7], x ∈ [-10, 10]) so we never stare through the back wall. */
 const PRESETS: Record<
   CameraPresetId,
   { position: [number, number, number]; target: [number, number, number] }
 > = {
-  wide: { position: [0, 6.5, 14], target: [0, 1.2, 0] },
-  judge: { position: [0, 3.2, -8.5], target: [0, 1.4, 2] },
-  witness: { position: [0, 2.4, 7.2], target: [0, 1.5, 0.5] },
-  jury: { position: [7, 2.8, 4.5], target: [2, 1.5, 2] },
-  prosecution: { position: [-7.5, 2.6, 5], target: [-2.5, 1.2, 1] },
-  defense: { position: [7.5, 2.6, 5], target: [2.5, 1.2, 1] },
+  wide: { position: [0, 7, 11], target: [0, 1.1, 0] },
+  /** In front of the judge bench (bench ~ z -5.4); look toward witness / well. */
+  judge: { position: [0, 3.8, -5.0], target: [0, 1.3, 2.5] },
+  witness: { position: [2.2, 2.9, 4.2], target: [0, 1.35, 2.9] },
+  jury: { position: [4.2, 3.2, 4.8], target: [0, 1.2, 1.5] },
+  prosecution: { position: [-5.5, 3.0, 3.2], target: [-1.5, 1.15, 1.8] },
+  defense: { position: [5.5, 3.0, 3.2], target: [1.5, 1.15, 1.8] },
 };
 
 export function applyCameraPreset(

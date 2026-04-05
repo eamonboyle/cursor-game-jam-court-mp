@@ -30,16 +30,22 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
   const renderer = createWebGLRenderer(canvas);
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x1a1a24);
-  scene.fog = new THREE.Fog(0x1a1a24, 18, 55);
+  /// Wide fog range so fixed cameras (especially judge / sides) never wash the room to background.
+  scene.fog = new THREE.Fog(0x1a1a24, 50, 130);
 
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 120);
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.52);
-  const key = new THREE.DirectionalLight(0xfff2dd, 1.05);
-  key.position.set(-6, 14, 8);
-  const fill = new THREE.DirectionalLight(0xccd8ff, 0.35);
-  fill.position.set(8, 8, -4);
-  scene.add(ambient, key, fill);
+  const hemi = new THREE.HemisphereLight(0xebf2ff, 0x5c4636, 0.82);
+  const ambient = new THREE.AmbientLight(0xffffff, 0.78);
+  const key = new THREE.DirectionalLight(0xfff4e0, 0.95);
+  key.position.set(-8, 16, 6);
+  const fill = new THREE.DirectionalLight(0xd0dcff, 0.55);
+  fill.position.set(10, 10, 2);
+  const rim = new THREE.DirectionalLight(0xffeedd, 0.35);
+  rim.position.set(0, 6, -12);
+  const well = new THREE.PointLight(0xffeedd, 0.85, 80, 1.8);
+  well.position.set(0, 9, 1.5);
+  scene.add(hemi, ambient, key, fill, rim, well);
 
   const courtroom = buildCourtroomPlaceholderRoot();
   const anchors = createSeatAnchors(courtroom);

@@ -11,7 +11,10 @@ function box(
   name: string,
 ): THREE.Mesh {
   const geo = new THREE.BoxGeometry(w, h, d);
-  const mat = new THREE.MeshLambertMaterial({ color });
+  const mat = new THREE.MeshLambertMaterial({
+    color,
+    emissive: new THREE.Color(color).multiplyScalar(0.04),
+  });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.name = name;
   mesh.position.set(x, y, z);

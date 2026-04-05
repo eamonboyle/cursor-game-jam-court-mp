@@ -12,7 +12,10 @@ const ROLE_COLORS: Record<CourtroomRoleId, number> = {
 
 function makeCapsule(color: number): THREE.Mesh {
   const geo = new THREE.CapsuleGeometry(0.35, 1.1, 4, 8);
-  const mat = new THREE.MeshLambertMaterial({ color });
+  const mat = new THREE.MeshLambertMaterial({
+    color,
+    emissive: new THREE.Color(color).multiplyScalar(0.08),
+  });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.name = "role_capsule";
   return mesh;

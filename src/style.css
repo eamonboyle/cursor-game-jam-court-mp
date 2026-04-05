@@ -75,6 +75,62 @@ body {
   background: rgb(0 0 0 / 35%);
 }
 
+.counsel-panel {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: min(640px, 100%);
+  pointer-events: auto;
+}
+
+.counsel-col--wide {
+  grid-column: 1 / -1;
+}
+
+.counsel-heading {
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.88;
+}
+
+.counsel-card-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.counsel-card-btn,
+.evidence-btn {
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  border-radius: 5px;
+  border: 1px solid rgb(255 255 255 / 22%);
+  color: inherit;
+  background: rgb(0 0 0 / 45%);
+}
+
+.counsel-card-btn:hover,
+.evidence-btn:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.counsel-card-btn--pro {
+  border-color: rgb(220 120 120 / 45%);
+}
+
+.counsel-card-btn--def {
+  border-color: rgb(120 160 220 / 45%);
+}
+
+.evidence-btn {
+  border-color: rgb(180 200 140 / 45%);
+}
+
 #ui-root > * {
   pointer-events: auto;
 }

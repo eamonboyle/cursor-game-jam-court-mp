@@ -41,7 +41,8 @@ Planned top-level folders:
 | [`src/game/matchState.ts`](../src/game/matchState.ts) | `MatchState` model + initial factory. |
 | [`src/game/turnTimer.ts`](../src/game/turnTimer.ts) | Turn timer with pause / resume / expire ticks. |
 | [`src/game/phaseTransitions.ts`](../src/game/phaseTransitions.ts) | Allowed-edge map + `applyPhaseTransition`. |
-| [`src/game/matchController.ts`](../src/game/matchController.ts) | RAF loop, dev keys, listeners, visual sync. |
+| [`src/game/matchController.ts`](../src/game/matchController.ts) | RAF loop, dev keys, listeners, visual sync, counsel play/evidence. |
+| [`src/game/counsel.ts`](../src/game/counsel.ts) | `CounselSide`, stub card/evidence definitions (Milestone D). |
 | [`src/game/phaseTransitions.test.ts`](../src/game/phaseTransitions.test.ts) | Vitest coverage for transition graph. |
 | [`src/data/loaders.ts`](../src/data/loaders.ts) | Placeholder for `/data` JSON load + validation. |
 | [`src/audio/audioBus.ts`](../src/audio/audioBus.ts) | Stub audio bus until Web Audio integration. |

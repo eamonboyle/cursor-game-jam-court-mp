@@ -1,3 +1,4 @@
+import type { PlayedCardEntry } from "./counsel";
 import type { ActiveRole } from "./roles";
 import type { TrialPhase } from "./trialPhase";
 import type { TurnTimerSnapshot } from "./turnTimer";
@@ -15,6 +16,8 @@ export type MatchState = {
   turnTimer: TurnTimerSnapshot;
   currentWitnessId: string | null;
   evidenceStack: readonly string[];
+  /** counsel card plays (Milestone D). */
+  playedCards: readonly PlayedCardEntry[];
   jurySentiment: number;
   rulingHistory: readonly RulingEntry[];
 };
@@ -30,6 +33,7 @@ export function createInitialMatchState(): { state: MatchState; timer: TurnTimer
     turnTimer: timer.snapshot(),
     currentWitnessId: null,
     evidenceStack: [],
+    playedCards: [],
     jurySentiment: 0,
     rulingHistory: [],
   };
