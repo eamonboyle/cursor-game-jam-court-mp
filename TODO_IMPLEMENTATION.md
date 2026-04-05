@@ -7,12 +7,12 @@
 ## Status snapshot
 
 
-| Field                    | Value                                                                                                                                                                                                                                    |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Project**              | Court of Public Opinion                                                                                                                                                                                                                  |
-| **Active track**         | Vision checklist (game bootstrap) — *Technical architecture checklist may parallel later; this row names what drives the current pass.*                                                                                                  |
-| **Current phase / step** | Phase 0 complete; **next: Vision Phase 1, Step 1** — Initialize a Vite TypeScript project.                                                                                                                                               |
-| **Next action**          | Run Vision Phase 1 in `[docs/01_game_vision_execution_checklist.md](docs/01_game_vision_execution_checklist.md)` from Step 1; align `src/` creation with `[docs/repo_layout.md](docs/repo_layout.md)` and technical Phase 1 when coding. |
+| Field                    | Value                                                                                                                                                                                                     |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Project**              | Court of Public Opinion                                                                                                                                                                                   |
+| **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
+| **Current phase / step** | **Milestone J** complete; vision Phase 5 milestone strip done — iterate on content / shipping.                                                                                                            |
+| **Next action**          | Jam polish, optional hosting, or expand `/data` cases per [`mvp-scope.md`](docs/mvp-scope.md).                                                                                                             |
 
 
 **Blockers:** none.
@@ -30,7 +30,7 @@
 | `[docs/04_technical_architecture.md](docs/04_technical_architecture.md)` | `[docs/04_technical_architecture_execution_checklist.md](docs/04_technical_architecture_execution_checklist.md)` |
 
 
-Supporting docs: `[docs/project-rules.md](docs/project-rules.md)`, `[docs/repo_layout.md](docs/repo_layout.md)`. Human/agent contract: `[AGENTS.md](AGENTS.md)`.
+Supporting docs: [`docs/project-rules.md`](docs/project-rules.md), [`docs/repo_layout.md`](docs/repo_layout.md), [`docs/mvp-scope.md`](docs/mvp-scope.md), [`docs/art_direction_and_assets.md`](docs/art_direction_and_assets.md), [`docs/production_sequencing.md`](docs/production_sequencing.md). Human/agent contract: [`AGENTS.md`](AGENTS.md).
 
 ### Dual-track note
 
@@ -50,6 +50,24 @@ Do **not** paste full checklists into this file.
 
 ## Session log (newest first)
 
+### 2026-04-04 — Milestone J browser MVP polish
+
+- **Done:** Welcome gate + session `?play=1` / `?skipWelcome`; global + room error banners; readable copy + collapsible quick tips; Web Audio phase chimes; eased auto camera between presets; meta/theme; docs checklist Milestone J.
+- **Next:** Optional cases/art/hosting per jam goals.
+- **Blockers / decisions:** none.
+
+### 2026-04-04 — Milestone I three playable cases
+
+- **Done:** `data/cases/*.json` + `index.json`; `caseTypes` validation + `caseRegistry`; `MatchState.caseId` + `examWitnessId`; `phaseTransitions` witness from case; `MatchCore` decks + `resetToFreshCase`; `MatchController` `initialCaseId` / `restartLocalTrial`; room **host** optional `caseId`; overlay docket select + **New local trial** + dynamic counsel/evidence buttons; `?case=` URL; Vitest for registry.
+- **Next:** Milestone J polish.
+- **Blockers / decisions:** Headless Chrome snapshot did not execute the Vite app in this environment; verify dossier labels and phase flow in a normal browser.
+
+### 2026-04-04 — Milestone H multiplayer room
+
+- **Done:** `MatchCore` + browser `MatchController` with `hydrateFromNetwork` / `setNetworkClientMode`; `src/net/roomProtocol.ts`, `roomClient.ts`; Node `ws` server `src/server/roomHost.ts` (`npm run room-server`, `ROOM_PORT` / default 8787); overlay room panel + `AppRoot` wiring + `VITE_ROOM_WS`; join-via-`?room=` suppresses local tick until welcome.
+- **Next:** Milestone I (cases in `/data`).
+- **Blockers / decisions:** Room server is in-process memory only (dev/local); production would replace with hosted multiplayer per tech arch.
+
 ### Template (copy for new entries)
 
 ```
@@ -58,6 +76,66 @@ Do **not** paste full checklists into this file.
 - **Next:** …
 - **Blockers / decisions:** …
 ```
+
+### 2026-04-06 — Milestone G AI seat fill (local)
+
+- **Done:** `SeatFillMap` + `aiLatch` on `MatchState`; `runAiSeatFill` drives jury poll, objection ruling, and exam/cross counsel cards when seats are AI; overlay checkboxes + jam solo preset; UI disables human controls for AI seats; `ai/seatBehavior` + Vitest.
+- **Next:** Milestone H (minimal room / sync).
+- **Blockers / decisions:** No network yet — bots are deterministic client-side stubs; server should own seat fill later per tech arch.
+
+### 2026-04-06 — Milestone F jury deliberation and verdict tally
+
+- **Done:** `juryVotes` + `verdictOutcome` on `MatchState`; `tryCastJuryVote` / `castJuryVote`; phase hooks reset poll on `jury_deliberation`, resolve on `verdict`, clear on `idle`; counsel/evidence locked in deliberation + verdict; UI jury buttons + poll/verdict lines; HUD jury/verdict; Vitest for jury + phase reset.
+- **Next:** Milestone G (AI seats).
+- **Blockers / decisions:** Local stub uses six manual clicks for the full poll; AI mix-ins come with Milestone G.
+
+### 2026-04-06 — Milestone E judge bounded rulings
+
+- **Done:** `objection` phase assigns `activeRole` judge; `tryAppendJudgeRuling` + `recordJudgeRuling`; counsel/evidence inputs blocked during objection; overlay judge palette + last ruling line; Vitest for rulings + active role; camera uses judge preset (removed objection-wide override); `RulingEntry.rulingId` optional field.
+- **Next:** (superseded by Milestone F log above.)
+- **Blockers / decisions:** none.
+
+### 2026-04-06 — Milestone D counsel UI + camera/lighting fix
+
+- **Done:** Repositioned cinematic presets inside room; softer fog + hemisphere/fill/rim lights + farther `far` plane; stub prosecution/defense/evidence buttons → `MatchController.playCard` / `revealEvidence`; trial panel shows card + record lines; Milestone D + Ticket 5 checked.
+- **Next:** Milestone E (judge bounded rulings).
+- **Blockers / decisions:** none.
+
+### 2026-04-06 — Milestone C trial state machine + debug
+
+- **Done:** `MatchState`, `TurnTimer`, `phaseTransitions` + Vitest tests, `MatchController` (] legal, [ \\ dev cycle, console logs), UI trial panel, HUD + camera refresh on visual sync; Gameplay loop Phase 1 checklist complete; Milestone C + Ticket 4; removed unused `session` stub.
+- **Next:** Milestone D / card + evidence UI and actions.
+- **Blockers / decisions:** none.
+
+### 2026-04-06 — Milestone B courtroom + Tech arch Phase 2
+
+- **Done:** Modular rendering (`rendererBootstrap`, placeholder courtroom props/walls, `CourtroomSceneState`, cinematic presets, seat anchors, role capsules); HUD + keys **1–6** camera presets / **0** auto; Milestone B + Tech Phase 2 + suggested Ticket 3 marked complete; [`docs/repo_layout.md`](docs/repo_layout.md) table updated.
+- **Next:** Milestone C — local trial flow + debug phase controller ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md) Phase 1).
+- **Blockers / decisions:** none.
+
+### 2026-04-06 — Vision Phase 4 production sequencing
+
+- **Done:** Added [`docs/production_sequencing.md`](docs/production_sequencing.md) (canonical build order, rationale, milestone mapping, dependency diagram); Vision Phase 4 checklist steps 1–10 marked complete.
+- **Next:** **Milestone B** + technical roadmap (courtroom placeholders — Tech arch Phase 2 rendering tasks).
+- **Blockers / decisions:** none.
+
+### 2026-04-06 — Vision Phase 3 art direction and assets
+
+- **Done:** Added `[docs/art_direction_and_assets.md](docs/art_direction_and_assets.md)` (scene/character/UI/SFX lists, PS1 rules, rig spec, texture rules, props, must-have vs nice-to-have board); Vision Phase 3 checklist steps 1–10 marked complete.
+- **Next:** Vision Phase 4 — production sequencing (see checklist); optional: capture order in a short repo doc.
+- **Blockers / decisions:** none.
+
+### 2026-04-06 — Vision Phase 2 MVP scope lock
+
+- **Done:** Added `[docs/mvp-scope.md](docs/mvp-scope.md)` (MVP statement, locked decisions, content targets, not-in-MVP, freeze rule); Vision Phase 2 checklist steps 1–10 marked complete in `[docs/01_game_vision_execution_checklist.md](docs/01_game_vision_execution_checklist.md)`.
+- **Next:** Vision Phase 3, Step 1 — courtroom art asset list (and rest of Phase 3 per checklist).
+- **Blockers / decisions:** none.
+
+### 2026-04-05 — Vision Phase 1 bootstrap (Vite + Three.js shell)
+
+- **Done:** Vite + strict TypeScript, Three.js, ESLint/Prettier, `src/{app,rendering,ui,game,data,audio,debug}`, `AppRoot`, canvas + UI + debug HUD, resize handler, minimal lit scene, global error handlers; Vision Phase 1 and Technical Phase 1 checklists marked complete; `[docs/repo_layout.md](docs/repo_layout.md)` updated with file ownership; README run commands.
+- **Next:** Vision Phase 2, Step 1 — `[docs/mvp-scope.md](docs/mvp-scope.md)`.
+- **Blockers / decisions:** `@types/three` added as devDependency (Three npm package lacks `types` entry for this toolchain).
 
 ### 2026-04-04 — Phase 0 repo framing
 

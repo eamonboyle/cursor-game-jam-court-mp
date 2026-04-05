@@ -1,0 +1,8 @@
+{
+  "defaultCaseId": "case_stub_v_internet",
+  "cases": [
+    { "id": "case_stub_v_internet", "title": "Stub v. Internet" },
+    { "id": "case_verified_hot_take", "title": "The Verified Hot Take" },
+    { "id": "case_parcel_of_doubt", "title": "Parcel of Doubt" }
+  ]
+}

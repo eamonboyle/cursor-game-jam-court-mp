@@ -14,16 +14,16 @@
 - Separate rendering, UI, and gameplay state from the start.
 
 ### Checklist
-- [ ] Phase 1, Step 1: Create `/src/app` for app bootstrap and lifecycle.
-- [ ] Phase 1, Step 2: Create `/src/rendering` for Three.js scene systems.
-- [ ] Phase 1, Step 3: Create `/src/ui` for overlay components and HUD panels.
-- [ ] Phase 1, Step 4: Create `/src/game` for rules, match state, and actions.
-- [ ] Phase 1, Step 5: Create `/src/data` for loaders and schema validation.
-- [ ] Phase 1, Step 6: Create `/src/audio` for music and one-shot sound hooks.
-- [ ] Phase 1, Step 7: Create `/src/debug` for dev panels and inspectors.
-- [ ] Phase 1, Step 8: Create an `AppRoot` that initializes renderer, scene, UI, and game state.
-- [ ] Phase 1, Step 9: Add global error boundaries or fail-safe logging where practical.
-- [ ] Phase 1, Step 10: Document folder ownership and file responsibilities.
+- [x] Phase 1, Step 1: Create `/src/app` for app bootstrap and lifecycle.
+- [x] Phase 1, Step 2: Create `/src/rendering` for Three.js scene systems.
+- [x] Phase 1, Step 3: Create `/src/ui` for overlay components and HUD panels.
+- [x] Phase 1, Step 4: Create `/src/game` for rules, match state, and actions.
+- [x] Phase 1, Step 5: Create `/src/data` for loaders and schema validation.
+- [x] Phase 1, Step 6: Create `/src/audio` for music and one-shot sound hooks.
+- [x] Phase 1, Step 7: Create `/src/debug` for dev panels and inspectors.
+- [x] Phase 1, Step 8: Create an `AppRoot` that initializes renderer, scene, UI, and game state.
+- [x] Phase 1, Step 9: Add global error boundaries or fail-safe logging where practical.
+- [x] Phase 1, Step 10: Document folder ownership and file responsibilities.
 
 ### Exit criteria
 - Codebase structure is predictable.
@@ -38,16 +38,16 @@
 - Support one main courtroom scene with fixed cameras.
 
 ### Checklist
-- [ ] Phase 2, Step 1: Create a renderer bootstrap module.
-- [ ] Phase 2, Step 2: Create a scene bootstrap module.
-- [ ] Phase 2, Step 3: Create a camera controller supporting fixed cinematic presets.
-- [ ] Phase 2, Step 4: Add a main animation loop with delta time.
-- [ ] Phase 2, Step 5: Add a resize-safe renderer and camera update path.
-- [ ] Phase 2, Step 6: Add lighting suitable for PS1-style readability.
-- [ ] Phase 2, Step 7: Add courtroom placeholder meshes first.
-- [ ] Phase 2, Step 8: Add seat anchors for each role.
-- [ ] Phase 2, Step 9: Add simple character placeholders or capsules before real models.
-- [ ] Phase 2, Step 10: Add a scene state controller that reacts to trial phase and active speaker.
+- [x] Phase 2, Step 1: Create a renderer bootstrap module.
+- [x] Phase 2, Step 2: Create a scene bootstrap module.
+- [x] Phase 2, Step 3: Create a camera controller supporting fixed cinematic presets.
+- [x] Phase 2, Step 4: Add a main animation loop with delta time.
+- [x] Phase 2, Step 5: Add a resize-safe renderer and camera update path.
+- [x] Phase 2, Step 6: Add lighting suitable for PS1-style readability.
+- [x] Phase 2, Step 7: Add courtroom placeholder meshes first.
+- [x] Phase 2, Step 8: Add seat anchors for each role.
+- [x] Phase 2, Step 9: Add simple character placeholders or capsules before real models.
+- [x] Phase 2, Step 10: Add a scene state controller that reacts to trial phase and active speaker.
 
 ### Exit criteria
 - Courtroom scene renders reliably.

@@ -5,6 +5,9 @@ Browser-based multiplayer courtroom party game: fast, theatrical trials with str
 ## MVP in brief
 
 - **Session length:** about 8–12 minutes per trial (see [`docs/01_game_vision.md`](docs/01_game_vision.md)).
+- **Scope:** locked MVP boundaries and content targets in [**`docs/mvp-scope.md`**](docs/mvp-scope.md).
+- **Art / audio:** PS1 direction and asset lists in [**`docs/art_direction_and_assets.md`**](docs/art_direction_and_assets.md).
+- **Build order:** [**`docs/production_sequencing.md`**](docs/production_sequencing.md) (locked sequencing for implementation).
 - **Focus:** one stable courtroom, deterministic data-driven cases, AI-filled empty seats, desktop browser first.
 - **Design and implementation tracking:** [`docs/`](docs/) for specs; [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md) for current status; **[`AGENTS.md`](AGENTS.md)** for mandatory AI/human workflow.
 
@@ -17,7 +20,27 @@ Browser-based multiplayer courtroom party game: fast, theatrical trials with str
 
 ## Local development
 
-**Not yet bootstrapped.** Run commands (`npm install`, `npm run dev`, etc.) will be added in **Vision Phase 1** per [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md). Until then, this repo is design + repo framing only.
+```bash
+npm install
+npm run dev         # Vite dev server + hot reload
+npm run room-server # Authoritative room WebSocket host (default ws://127.0.0.1:8787)
+npm run build       # Typecheck + production bundle to dist/
+npm run preview     # Serve dist/
+npm run lint
+npm run typecheck
+npm run test        # Vitest (phase transition unit tests)
+```
+
+Use **two terminals** for multiplayer smoke tests: `npm run room-server` then `npm run dev`. Optional: set `VITE_ROOM_WS` in `.env` if the room host is not on the default URL.
+
+**Query params:**
+
+- `?case=<case_id>` — starting docket (see `data/cases/index.json`).
+- `?play=1` or `?skipWelcome=1` — skip the first-run welcome modal (QA / embeds).
+
+Example: [`http://localhost:5173/?case=case_verified_hot_take&play=1`](http://localhost:5173/?case=case_verified_hot_take&play=1). Invalid case ids fall back to the default.
+
+**Milestones A–J** are complete: gameplay through Milestone I plus **welcome onboarding**, **error surfacing**, **phase audio cues**, **eased trial cameras**, and **production build** checks. See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md).
 
 ## Contributing / agents
 

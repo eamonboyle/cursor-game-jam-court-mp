@@ -1,0 +1,21 @@
+{
+  "id": "case_verified_hot_take",
+  "title": "State v. Rivera — The Verified Hot Take",
+  "tagline": "A metrics dashboard allegedly proves intent. The defense says it is just engagement theater.",
+  "witnessId": "witness_analyst_morgan",
+  "prosecutionCards": [
+    { "id": "pro_kpi_trap", "label": "KPI that implies motive" },
+    { "id": "pro_retention_spike", "label": "Retention spike after the post" },
+    { "id": "pro_audit_trail", "label": "Immutable audit trail (maybe)" }
+  ],
+  "defenseCards": [
+    { "id": "def_wrong_axis", "label": "Wrong axis label — honest mistake" },
+    { "id": "def_bot_farm", "label": "Suggest bot farm noise" },
+    { "id": "def_context_collapse", "label": "Context collapse, not conspiracy" }
+  ],
+  "evidence": [
+    { "id": "ev_labeled_png", "label": "Labeled PNG export (suspicious crop)" },
+    { "id": "ev_slack_thread", "label": "Slack thread titled 'ship it'" },
+    { "id": "ev_incident_doc", "label": "Blameless incident doc (heavy redlines)" }
+  ]
+}

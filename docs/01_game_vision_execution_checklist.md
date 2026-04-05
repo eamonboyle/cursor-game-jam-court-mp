@@ -65,22 +65,22 @@
 - Create the foundation the rest of the game builds on.
 
 ### Checklist
-- [ ] Phase 1, Step 1: Initialize a Vite TypeScript project.
-- [ ] Phase 1, Step 2: Install Three.js and supporting runtime dependencies.
-- [ ] Phase 1, Step 3: Install development tooling:
+- [x] Phase 1, Step 1: Initialize a Vite TypeScript project.
+- [x] Phase 1, Step 2: Install Three.js and supporting runtime dependencies.
+- [x] Phase 1, Step 3: Install development tooling:
   - ESLint
   - Prettier
   - TypeScript strict settings
-- [ ] Phase 1, Step 4: Add npm scripts for dev, build, preview, lint, and typecheck.
-- [ ] Phase 1, Step 5: Create the base `src/main.ts` entrypoint.
-- [ ] Phase 1, Step 6: Create a minimal application shell that mounts:
+- [x] Phase 1, Step 4: Add npm scripts for dev, build, preview, lint, and typecheck.
+- [x] Phase 1, Step 5: Create the base `src/main.ts` entrypoint.
+- [x] Phase 1, Step 6: Create a minimal application shell that mounts:
   - Three.js canvas
   - UI overlay root
   - debug HUD root
-- [ ] Phase 1, Step 7: Confirm the project runs locally with no errors.
-- [ ] Phase 1, Step 8: Add a neutral background scene to verify rendering pipeline.
-- [ ] Phase 1, Step 9: Add a basic resize handler for the renderer and camera.
-- [ ] Phase 1, Step 10: Commit a clean bootstrap checkpoint.
+- [x] Phase 1, Step 7: Confirm the project runs locally with no errors.
+- [x] Phase 1, Step 8: Add a neutral background scene to verify rendering pipeline.
+- [x] Phase 1, Step 9: Add a basic resize handler for the renderer and camera.
+- [x] Phase 1, Step 10: Commit a clean bootstrap checkpoint.
 
 ### Exit criteria
 - The game boots in browser.
@@ -96,22 +96,22 @@
 - Translate the concept into concrete player-facing features.
 
 ### Checklist
-- [ ] Phase 2, Step 1: Write a one-page MVP statement in `/docs/mvp-scope.md`.
-- [ ] Phase 2, Step 2: Confirm the only shipped map for MVP is a single courtroom.
-- [ ] Phase 2, Step 3: Confirm the only mandatory deep roles are Prosecutor and Defense.
-- [ ] Phase 2, Step 4: Confirm Judge is bounded and Jury decides verdict.
-- [ ] Phase 2, Step 5: Confirm Witness and Juror are light roles for MVP.
-- [ ] Phase 2, Step 6: Confirm all player inputs are structured, not freeform.
-- [ ] Phase 2, Step 7: Confirm all shipped cases are predefined data, not live generated.
-- [ ] Phase 2, Step 8: Set MVP target content counts:
+- [x] Phase 2, Step 1: Write a one-page MVP statement in `/docs/mvp-scope.md`.
+- [x] Phase 2, Step 2: Confirm the only shipped map for MVP is a single courtroom.
+- [x] Phase 2, Step 3: Confirm the only mandatory deep roles are Prosecutor and Defense.
+- [x] Phase 2, Step 4: Confirm Judge is bounded and Jury decides verdict.
+- [x] Phase 2, Step 5: Confirm Witness and Juror are light roles for MVP.
+- [x] Phase 2, Step 6: Confirm all player inputs are structured, not freeform.
+- [x] Phase 2, Step 7: Confirm all shipped cases are predefined data, not live generated.
+- [x] Phase 2, Step 8: Set MVP target content counts:
   - courtroom scene: 1
   - cases: 3 to 5
   - evidence cards: 20 to 30
   - objections: 8 to 12
   - witness archetypes: 6 to 10
   - juror archetypes: 6 to 10
-- [ ] Phase 2, Step 9: Write a “not in MVP” section to avoid scope creep.
-- [ ] Phase 2, Step 10: Freeze the MVP until the first playable exists.
+- [x] Phase 2, Step 9: Write a “not in MVP” section to avoid scope creep.
+- [x] Phase 2, Step 10: Freeze the MVP until the first playable exists.
 
 ### Exit criteria
 - MVP is explicit.
@@ -127,18 +127,18 @@
 - Define what models, textures, and images are actually needed.
 
 ### Checklist
-- [ ] Phase 3, Step 1: Create an art asset list for the courtroom scene.
-- [ ] Phase 3, Step 2: Create an art asset list for character models.
-- [ ] Phase 3, Step 3: Create an art asset list for UI illustrations and evidence art.
-- [ ] Phase 3, Step 4: Define PS1 style rules:
+- [x] Phase 3, Step 1: Create an art asset list for the courtroom scene.
+- [x] Phase 3, Step 2: Create an art asset list for character models.
+- [x] Phase 3, Step 3: Create an art asset list for UI illustrations and evidence art.
+- [x] Phase 3, Step 4: Define PS1 style rules:
   - low poly silhouettes
   - limited texture resolution
   - slightly exaggerated proportions
   - strong readable poses
   - fixed cinematic camera framing
-- [ ] Phase 3, Step 5: Decide character rig complexity for MVP.
-- [ ] Phase 3, Step 6: Define texture naming and export rules.
-- [ ] Phase 3, Step 7: Create a list of required courtroom props:
+- [x] Phase 3, Step 5: Decide character rig complexity for MVP.
+- [x] Phase 3, Step 6: Define texture naming and export rules.
+- [x] Phase 3, Step 7: Create a list of required courtroom props:
   - judge bench
   - prosecution desk
   - defense desk
@@ -146,19 +146,19 @@
   - jury box
   - defendant seat
   - verdict signage
-- [ ] Phase 3, Step 8: Create a list of required 2D UI assets:
+- [x] Phase 3, Step 8: Create a list of required 2D UI assets:
   - role badges
   - card frames
   - evidence thumbnails
   - reaction icons
   - verdict stamps
-- [ ] Phase 3, Step 9: Create a list of required sound effects:
+- [x] Phase 3, Step 9: Create a list of required sound effects:
   - gavel hit
   - objection sting
   - card play click
   - witness reveal
   - verdict sting
-- [ ] Phase 3, Step 10: Create an asset production board grouped by must-have and nice-to-have.
+- [x] Phase 3, Step 10: Create an asset production board grouped by must-have and nice-to-have.
 
 ### Exit criteria
 - Asset scope is measurable.
@@ -174,16 +174,16 @@
 - Prevent random feature jumps.
 
 ### Checklist
-- [ ] Phase 4, Step 1: Build client shell before networking.
-- [ ] Phase 4, Step 2: Build courtroom scene before content variety.
-- [ ] Phase 4, Step 3: Build phase-based match state before UI polish.
-- [ ] Phase 4, Step 4: Build cards and evidence system before full role variety.
-- [ ] Phase 4, Step 5: Build AI seat-filling after human flow works locally.
-- [ ] Phase 4, Step 6: Add online rooms only after offline flow is playable.
-- [ ] Phase 4, Step 7: Add content expansion only after one full case is stable.
-- [ ] Phase 4, Step 8: Add audio and camera polish after the trial loop is complete.
-- [ ] Phase 4, Step 9: Add menu and onboarding after core play is understandable.
-- [ ] Phase 4, Step 10: Run a stability pass before building extra cases.
+- [x] Phase 4, Step 1: Build client shell before networking.
+- [x] Phase 4, Step 2: Build courtroom scene before content variety.
+- [x] Phase 4, Step 3: Build phase-based match state before UI polish.
+- [x] Phase 4, Step 4: Build cards and evidence system before full role variety.
+- [x] Phase 4, Step 5: Build AI seat-filling after human flow works locally.
+- [x] Phase 4, Step 6: Add online rooms only after offline flow is playable.
+- [x] Phase 4, Step 7: Add content expansion only after one full case is stable.
+- [x] Phase 4, Step 8: Add audio and camera polish after the trial loop is complete.
+- [x] Phase 4, Step 9: Add menu and onboarding after core play is understandable.
+- [x] Phase 4, Step 10: Run a stability pass before building extra cases.
 
 ### Exit criteria
 - Order of work is fixed.
@@ -195,16 +195,16 @@
 ## Phase 5. Milestone checkpoints
 
 ### Checklist
-- [ ] Milestone A: Bootable scene with Three.js canvas and UI overlay.
-- [ ] Milestone B: Courtroom scene renders with placeholder assets.
-- [ ] Milestone C: Local single-case trial flow works with debug controls.
-- [ ] Milestone D: Prosecutor and Defense can play cards and evidence.
-- [ ] Milestone E: Judge can rule in bounded windows.
-- [ ] Milestone F: Jury can evaluate and vote.
-- [ ] Milestone G: AI can fill empty seats.
-- [ ] Milestone H: Multiplayer room flow works.
-- [ ] Milestone I: At least three complete cases are playable.
-- [ ] Milestone J: Browser-ready MVP build is stable and readable.
+- [x] Milestone A: Bootable scene with Three.js canvas and UI overlay.
+- [x] Milestone B: Courtroom scene renders with placeholder assets.
+- [x] Milestone C: Local single-case trial flow works with debug controls.
+- [x] Milestone D: Prosecutor and Defense can play cards and evidence.
+- [x] Milestone E: Judge can rule in bounded windows.
+- [x] Milestone F: Jury can evaluate and vote.
+- [x] Milestone G: AI can fill empty seats.
+- [x] Milestone H: Multiplayer room flow works.
+- [x] Milestone I: At least three complete cases are playable.
+- [x] Milestone J: Browser-ready MVP build is stable and readable.
 
 ---
 
@@ -226,11 +226,11 @@
 
 - [ ] Ticket 1: Bootstrap Vite TypeScript project with Three.js canvas and overlay root.
 - [ ] Ticket 2: Create shared app layout and renderer bootstrap.
-- [ ] Ticket 3: Add courtroom scene placeholder geometry and fixed cameras.
-- [ ] Ticket 4: Add debug phase controller for a fake trial.
-- [ ] Ticket 5: Add card panel and simple action selection UI.
-- [ ] Ticket 6: Add JSON schema for one example case.
-- [ ] Ticket 7: Load the example case and show role-specific data.
-- [ ] Ticket 8: Add evidence panel and evidence reveal actions.
-- [ ] Ticket 9: Add judge ruling window and jury vote screen.
-- [ ] Ticket 10: Replace placeholder content with one complete playable trial.
+- [x] Ticket 3: Add courtroom scene placeholder geometry and fixed cameras.
+- [x] Ticket 4: Add debug phase controller for a fake trial.
+- [x] Ticket 5: Add card panel and simple action selection UI.
+- [x] Ticket 6: Add JSON schema for one example case.
+- [x] Ticket 7: Load the example case and show role-specific data.
+- [x] Ticket 8: Add evidence panel and evidence reveal actions.
+- [x] Ticket 9: Add judge ruling window and jury vote screen.
+- [x] Ticket 10: Replace placeholder content with one complete playable trial.
