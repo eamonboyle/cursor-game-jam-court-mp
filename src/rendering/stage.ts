@@ -1,9 +1,5 @@
 import * as THREE from "three";
-import {
-  applyCameraPreset,
-  listCameraPresetIds,
-  type CameraPresetId,
-} from "./camera/cinematicPresets";
+import { getCameraVectors, listCameraPresetIds, type CameraPresetId } from "./camera/cinematicPresets";
 import { addRoleCapsules } from "./characters/roleCapsules";
 import {
   buildCourtroomPlaceholderRoot,
@@ -12,6 +8,8 @@ import {
 import { CourtroomSceneState } from "./courtroomSceneState";
 import { createWebGLRenderer } from "./rendererBootstrap";
 import { createSeatAnchors } from "./seats/roleAnchors";
+
+const CAMERA_LERP = 0.11;
 
 export type StageHandles = {
   renderer: THREE.WebGLRenderer;
@@ -24,7 +22,8 @@ export type StageHandles = {
 };
 
 /**
- * Milestone B: placeholder courtroom, seat anchors, capsules, fixed camera presets, scene state stub.
+ * Placeholder courtroom, seat anchors, capsules, fixed camera presets, scene state stub.
+ * Camera eases between presets when the trial phase / speaker changes (Milestone J).
  */
 export function createStage(canvas: HTMLCanvasElement): StageHandles {
   const renderer = createWebGLRenderer(canvas);
@@ -57,10 +56,35 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
 
   let manualPreset: CameraPresetId | null = null;
   const presetIds = listCameraPresetIds();
+  const activePos = new THREE.Vector3();
+  const activeTarget = new THREE.Vector3();
 
-  const syncCamera = (): void => {
+  const syncCameraTargets = (): void => {
     const preset = manualPreset ?? sceneState.getSuggestedCameraPreset();
-    applyCameraPreset(camera, preset);
+    const { position, target } = getCameraVectors(preset);
+    activePos.copy(position);
+    activeTarget.copy(target);
+  };
+
+  const snapCameraToTargets = (): void => {
+    camera.position.copy(activePos);
+    camera.lookAt(activeTarget);
+  };
+
+  const camPosCur = new THREE.Vector3();
+  const camLookCur = new THREE.Vector3();
+  const camPosTo = new THREE.Vector3();
+  const camLookTo = new THREE.Vector3();
+
+  const refreshCamera = (): void => {
+    syncCameraTargets();
+    camPosTo.copy(activePos);
+    camLookTo.copy(activeTarget);
+    if (manualPreset !== null) {
+      camPosCur.copy(camPosTo);
+      camLookCur.copy(camLookTo);
+      snapCameraToTargets();
+    }
   };
 
   const getCameraLabel = (): string => {
@@ -68,11 +92,12 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
     return manualPreset ? `manual:${preset}` : `auto:${preset}`;
   };
 
-  const refreshCamera = (): void => {
-    syncCamera();
-  };
-
-  refreshCamera();
+  syncCameraTargets();
+  camPosCur.copy(activePos);
+  camLookCur.copy(activeTarget);
+  camPosTo.copy(activePos);
+  camLookTo.copy(activeTarget);
+  snapCameraToTargets();
 
   const onKeyDown = (e: KeyboardEvent): void => {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)
@@ -80,10 +105,15 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
     const n = Number(e.key);
     if (e.key === "0") {
       manualPreset = null;
-      syncCamera();
+      refreshCamera();
     } else if (Number.isInteger(n) && n >= 1 && n <= presetIds.length) {
       manualPreset = presetIds[n - 1] ?? "wide";
-      if (manualPreset) applyCameraPreset(camera, manualPreset);
+      syncCameraTargets();
+      camPosTo.copy(activePos);
+      camLookTo.copy(activeTarget);
+      camPosCur.copy(camPosTo);
+      camLookCur.copy(camLookTo);
+      snapCameraToTargets();
     }
   };
   window.addEventListener("keydown", onKeyDown);
@@ -105,6 +135,12 @@ export function createStage(canvas: HTMLCanvasElement): StageHandles {
   const tick = (): void => {
     rafId = requestAnimationFrame(tick);
     void clock.getDelta();
+    if (manualPreset === null) {
+      camPosCur.lerp(camPosTo, CAMERA_LERP);
+      camLookCur.lerp(camLookTo, CAMERA_LERP);
+      camera.position.copy(camPosCur);
+      camera.lookAt(camLookCur);
+    }
     renderer.render(scene, camera);
   };
 

@@ -22,13 +22,24 @@ const PRESETS: Record<
   defense: { position: [5.5, 3.0, 3.2], target: [1.5, 1.15, 1.8] },
 };
 
+export function getCameraVectors(preset: CameraPresetId): {
+  position: THREE.Vector3;
+  target: THREE.Vector3;
+} {
+  const p = PRESETS[preset];
+  return {
+    position: new THREE.Vector3(...p.position),
+    target: new THREE.Vector3(...p.target),
+  };
+}
+
 export function applyCameraPreset(
   camera: THREE.PerspectiveCamera,
   preset: CameraPresetId,
 ): void {
-  const p = PRESETS[preset];
-  camera.position.set(...p.position);
-  camera.lookAt(new THREE.Vector3(...p.target));
+  const { position, target } = getCameraVectors(preset);
+  camera.position.copy(position);
+  camera.lookAt(target);
 }
 
 export function listCameraPresetIds(): CameraPresetId[] {

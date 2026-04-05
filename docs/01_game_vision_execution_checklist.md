@@ -204,7 +204,7 @@
 - [x] Milestone G: AI can fill empty seats.
 - [x] Milestone H: Multiplayer room flow works.
 - [x] Milestone I: At least three complete cases are playable.
-- [ ] Milestone J: Browser-ready MVP build is stable and readable.
+- [x] Milestone J: Browser-ready MVP build is stable and readable.
 
 ---
 

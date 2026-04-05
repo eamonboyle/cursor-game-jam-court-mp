@@ -176,7 +176,16 @@ export function mountUiOverlay(
   container.innerHTML = `
     <div class="ui-shell">
       <p class="ui-title">Court of Public Opinion</p>
-      <p class="ui-sub">Placeholder courtroom · <kbd>]</kbd> legal next · <kbd>[</kbd> / <kbd>\\</kbd> dev cycle · room server · <strong>Milestone I</strong> data dossiers</p>
+      <p class="ui-sub">Browser MVP — one courtroom, data-driven dockets, AI seats, local room server.</p>
+      <details class="help-details">
+        <summary class="help-summary">Quick tips</summary>
+        <ul class="help-list">
+          <li><kbd>]</kbd> Legal next (host advances phases online)</li>
+          <li><kbd>[</kbd> / <kbd>\\</kbd> Dev-only phase cycle</li>
+          <li>Docket → <strong>New local trial</strong> to reset offline</li>
+          <li><kbd>?case=</kbd> and <kbd>?play=1</kbd> (skip welcome) in the URL</li>
+        </ul>
+      </details>
       <div class="case-panel" aria-label="Case selection">
         <h3 class="counsel-heading">Docket</h3>
         <p class="case-tagline" id="case-tagline-display">—</p>
@@ -191,6 +200,7 @@ export function mountUiOverlay(
       <div class="room-panel" aria-label="Multiplayer room">
         <h3 class="counsel-heading">Room</h3>
         <p class="room-status" id="room-status">Offline (local trial)</p>
+        <p class="room-error" id="room-error" role="alert" hidden></p>
         <div class="room-row">
           <input type="text" id="room-display-name" class="room-input" placeholder="Display name" value="Player" maxlength="32" />
         </div>
@@ -258,6 +268,16 @@ export function mountUiOverlay(
   const wsHint = container.querySelector("#room-ws-hint");
   if (wsHint) wsHint.textContent = wsUrl;
 
+  const roomErrorEl = container.querySelector<HTMLParagraphElement>("#room-error");
+  const priorRoomError = room.onError;
+  room.onError = (m) => {
+    priorRoomError?.(m);
+    if (roomErrorEl) {
+      roomErrorEl.textContent = m;
+      roomErrorEl.hidden = false;
+    }
+  };
+
   const caseSelect = container.querySelector<HTMLSelectElement>("#case-select");
   if (caseSelect) {
     for (const c of listCaseSummaries()) {
@@ -303,10 +323,18 @@ export function mountUiOverlay(
   const trialCaseIdEl = container.querySelector("#trial-case-id");
   const newLocalBtn = container.querySelector<HTMLButtonElement>("#case-new-local");
 
+  let wasRoomConnected = false;
+
   const render = (): void => {
     const s = match.getState();
     const net = room.isConnected();
     const myRole = room.getRole();
+
+    if (roomErrorEl && net && !wasRoomConnected) {
+      roomErrorEl.textContent = "";
+      roomErrorEl.hidden = true;
+    }
+    wasRoomConnected = net;
 
     if (s.caseId !== lastRenderedCaseId) {
       lastRenderedCaseId = s.caseId;

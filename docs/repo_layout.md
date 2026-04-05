@@ -24,7 +24,9 @@ Planned top-level folders:
 
 | Location | Responsibility |
 |----------|----------------|
-| [`src/main.ts`](../src/main.ts) | Application entry only: CSS import + `createApp().start()`. |
+| [`src/main.ts`](../src/main.ts) | CSS + `createApp()` + optional `mountWelcomeGate` before `AppRoot.start()`. |
+| [`src/ui/welcomeGate.ts`](../src/ui/welcomeGate.ts) | First-run MVP onboarding modal (`?play=1` skips). |
+| [`src/audio/audioBus.ts`](../src/audio/audioBus.ts) | `createTrialPhaseAudio` — Web Audio chimes on phase changes. |
 | [`src/style.css`](../src/style.css) | Full-viewport layout: `#canvas`, `#ui-root`, `#debug-root`. |
 | [`src/app/bootstrap.ts`](../src/app/bootstrap.ts) | `createApp()` — installs global error handlers, returns `AppRoot`. |
 | [`src/app/AppRoot.ts`](../src/app/AppRoot.ts) | Wires `MatchController`, `RoomClient`, Three.js stage, overlay (`mountUiOverlay` + `wsUrl` / `?room=`), and debug HUD. |

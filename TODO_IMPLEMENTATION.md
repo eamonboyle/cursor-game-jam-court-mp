@@ -11,8 +11,8 @@
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
 | **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
-| **Current phase / step** | **Milestone I** complete; **next: Milestone J** — browser-ready MVP stability / readability polish.                                                                                                         |
-| **Next action**          | Execution checklist Milestone J; performance, copy pass, and release-ready `npm run build` / preview QA.                                                                                                 |
+| **Current phase / step** | **Milestone J** complete; vision Phase 5 milestone strip done — iterate on content / shipping.                                                                                                            |
+| **Next action**          | Jam polish, optional hosting, or expand `/data` cases per [`mvp-scope.md`](docs/mvp-scope.md).                                                                                                             |
 
 
 **Blockers:** none.
@@ -49,6 +49,12 @@ Do **not** paste full checklists into this file.
 ---
 
 ## Session log (newest first)
+
+### 2026-04-04 — Milestone J browser MVP polish
+
+- **Done:** Welcome gate + session `?play=1` / `?skipWelcome`; global + room error banners; readable copy + collapsible quick tips; Web Audio phase chimes; eased auto camera between presets; meta/theme; docs checklist Milestone J.
+- **Next:** Optional cases/art/hosting per jam goals.
+- **Blockers / decisions:** none.
 
 ### 2026-04-04 — Milestone I three playable cases
 

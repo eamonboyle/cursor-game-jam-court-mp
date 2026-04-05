@@ -33,9 +33,14 @@ npm run test        # Vitest (phase transition unit tests)
 
 Use **two terminals** for multiplayer smoke tests: `npm run room-server` then `npm run dev`. Optional: set `VITE_ROOM_WS` in `.env` if the room host is not on the default URL.
 
-**Query params:** `?case=<case_id>` selects the starting docket (see `data/cases/index.json`). Example: [`http://localhost:5173/?case=case_verified_hot_take`](http://localhost:5173/?case=case_verified_hot_take). Invalid ids fall back to the default case.
+**Query params:**
 
-**Milestones A–I** are complete through counsel actions, judge rulings, jury verdict, **local AI seat fill**, **minimal authoritative room**, and **three bundled JSON cases** (`data/cases/`) wired into `MatchState.caseId`, witness id, counsel decks, and evidence. See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone J** — browser-ready MVP polish.
+- `?case=<case_id>` — starting docket (see `data/cases/index.json`).
+- `?play=1` or `?skipWelcome=1` — skip the first-run welcome modal (QA / embeds).
+
+Example: [`http://localhost:5173/?case=case_verified_hot_take&play=1`](http://localhost:5173/?case=case_verified_hot_take&play=1). Invalid case ids fall back to the default.
+
+**Milestones A–J** are complete: gameplay through Milestone I plus **welcome onboarding**, **error surfacing**, **phase audio cues**, **eased trial cameras**, and **production build** checks. See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md).
 
 ## Contributing / agents
 

@@ -1,8 +1,9 @@
-import { createAudioBusStub } from "../audio/audioBus";
+import { createTrialPhaseAudio, type TrialPhaseAudio } from "../audio/audioBus";
 import { resolveHostCaseId } from "../data/caseRegistry";
 import { loadCaseCatalog } from "../data/loaders";
 import { mountDebugHud } from "../debug/hud";
 import { MatchController } from "../game/matchController";
+import type { TrialPhase } from "../game/trialPhase";
 import { RoomClient } from "../net/roomClient";
 import { createStage } from "../rendering/stage";
 import { mountUiOverlay } from "../ui/overlay";
@@ -21,8 +22,11 @@ export class AppRoot {
   private readonly room = new RoomClient();
   private cleanupHud: (() => void) | null = null;
   private cleanupUi: (() => void) | null = null;
+  private phaseAudio: TrialPhaseAudio | null = null;
+  private phaseAudioUnsub: (() => void) | null = null;
+  private lastPhaseForAudio: TrialPhase | null = null;
 
-  start(): void {
+  async start(): Promise<void> {
     const canvas = requireElement<HTMLCanvasElement>("canvas");
     const uiRoot = requireElement<HTMLDivElement>("ui-root");
     const debugRoot = requireElement<HTMLDivElement>("debug-root");
@@ -31,6 +35,9 @@ export class AppRoot {
     const prejoinRoomId = params.get("room");
     const wsUrl = DEFAULT_ROOM_WS;
     const initialCaseId = resolveHostCaseId(params.get("case") ?? undefined);
+
+    this.phaseAudio = createTrialPhaseAudio();
+    await this.phaseAudio.resumeIfNeeded();
 
     this.stageReturn = createStage(canvas);
     this.match = new MatchController(
@@ -70,10 +77,16 @@ export class AppRoot {
     this.cleanupHud = mountDebugHud(debugRoot, this.stageReturn, this.match);
 
     void loadCaseCatalog();
-    void createAudioBusStub();
+
+    this.lastPhaseForAudio = this.match.getState().phase;
+    this.phaseAudioUnsub = this.match.subscribe((s) => {
+      if (s.phase !== this.lastPhaseForAudio) {
+        this.lastPhaseForAudio = s.phase;
+        this.phaseAudio?.playPhaseChange(s.phase);
+      }
+    });
 
     if (prejoinRoomId) {
-      // Suppress local simulation until the server snapshot arrives (see tick + key handling).
       this.match.setNetworkClientMode(true, null);
     }
 
@@ -85,6 +98,10 @@ export class AppRoot {
   }
 
   dispose(): void {
+    this.phaseAudioUnsub?.();
+    this.phaseAudioUnsub = null;
+    this.phaseAudio?.dispose();
+    this.phaseAudio = null;
     this.cleanupHud?.();
     this.cleanupHud = null;
     this.cleanupUi?.();
