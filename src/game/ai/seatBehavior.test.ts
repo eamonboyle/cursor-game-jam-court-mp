@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { STUB_DEFENSE_CARDS, STUB_PROSECUTION_CARDS } from "../counsel";
 import { createInitialMatchState } from "../matchState";
 import { applyPhaseTransition } from "../phaseTransitions";
 import { pickAiCounselCardId, pickAiJudgeRuling, pickAiJuryVote } from "./seatBehavior";
@@ -22,8 +23,12 @@ describe("pickAiJudgeRuling", () => {
 
 describe("pickAiCounselCardId", () => {
   it("cycles stubs", () => {
-    expect(pickAiCounselCardId("prosecution", 0)).toMatch(/^pro_/);
-    expect(pickAiCounselCardId("defense", 0)).toMatch(/^def_/);
+    expect(
+      pickAiCounselCardId("prosecution", 0, STUB_PROSECUTION_CARDS, STUB_DEFENSE_CARDS),
+    ).toMatch(/^pro_/);
+    expect(
+      pickAiCounselCardId("defense", 0, STUB_PROSECUTION_CARDS, STUB_DEFENSE_CARDS),
+    ).toMatch(/^def_/);
   });
 });
 

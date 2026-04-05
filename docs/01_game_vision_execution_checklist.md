@@ -203,7 +203,7 @@
 - [x] Milestone F: Jury can evaluate and vote.
 - [x] Milestone G: AI can fill empty seats.
 - [x] Milestone H: Multiplayer room flow works.
-- [ ] Milestone I: At least three complete cases are playable.
+- [x] Milestone I: At least three complete cases are playable.
 - [ ] Milestone J: Browser-ready MVP build is stable and readable.
 
 ---
@@ -229,8 +229,8 @@
 - [x] Ticket 3: Add courtroom scene placeholder geometry and fixed cameras.
 - [x] Ticket 4: Add debug phase controller for a fake trial.
 - [x] Ticket 5: Add card panel and simple action selection UI.
-- [ ] Ticket 6: Add JSON schema for one example case.
-- [ ] Ticket 7: Load the example case and show role-specific data.
-- [ ] Ticket 8: Add evidence panel and evidence reveal actions.
+- [x] Ticket 6: Add JSON schema for one example case.
+- [x] Ticket 7: Load the example case and show role-specific data.
+- [x] Ticket 8: Add evidence panel and evidence reveal actions.
 - [x] Ticket 9: Add judge ruling window and jury vote screen.
-- [ ] Ticket 10: Replace placeholder content with one complete playable trial.
+- [x] Ticket 10: Replace placeholder content with one complete playable trial.

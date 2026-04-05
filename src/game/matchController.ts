@@ -7,6 +7,11 @@ import type { MatchState } from "./matchState";
 import type { SeatFillMap } from "./seatFill";
 import type { TrialPhase } from "./trialPhase";
 
+export type MatchControllerOptions = {
+  /** Bundled docket id; defaults to registry default. */
+  initialCaseId?: string;
+};
+
 export type NetworkKeySink = {
   advanceLegal(): void;
   devCycle(delta: 1 | -1): void;
@@ -55,8 +60,9 @@ export class MatchController {
   constructor(
     private readonly visual: CourtroomSceneState,
     private readonly afterVisualSync?: () => void,
+    options?: MatchControllerOptions,
   ) {
-    this.core = new MatchCore();
+    this.core = new MatchCore(options?.initialCaseId);
     this.core.subscribe(() => {
       this.syncVisual();
       this.afterVisualSync?.();
@@ -145,6 +151,14 @@ export class MatchController {
 
   revealEvidence(evidenceId: string): void {
     this.core.revealEvidence(evidenceId);
+  }
+
+  /** Offline only: reset match to idle for the given docket and open statements. */
+  restartLocalTrial(caseId: string): void {
+    if (this.networkClientMode) return;
+    this.core.resetToFreshCase(caseId);
+    this.core.beginOpeningPhase();
+    this.syncVisual();
   }
 
   private readonly tick = (ts: number): void => {

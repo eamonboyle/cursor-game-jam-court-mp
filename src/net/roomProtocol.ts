@@ -23,7 +23,7 @@ export type ClientCommand =
   | { kind: "setSeatFill"; seatFill: SeatFillMap };
 
 export type ClientToServerMessage =
-  | { type: "host"; displayName: string }
+  | { type: "host"; displayName: string; caseId?: string }
   | { type: "join"; roomId: string; displayName: string }
   | { type: "command"; playerId: string; command: ClientCommand };
 

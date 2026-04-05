@@ -57,7 +57,9 @@ Planned top-level folders:
 | [`src/game/ai/seatBehavior.ts`](../src/game/ai/seatBehavior.ts) | Deterministic AI picks for votes, rulings, counsel stubs. |
 | [`src/game/ai/seatBehavior.test.ts`](../src/game/ai/seatBehavior.test.ts) | Vitest for AI helpers + latch reset. |
 | [`src/game/phaseTransitions.test.ts`](../src/game/phaseTransitions.test.ts) | Vitest coverage for transition graph. |
-| [`src/data/loaders.ts`](../src/data/loaders.ts) | Placeholder for `/data` JSON load + validation. |
+| [`src/data/loaders.ts`](../src/data/loaders.ts) | `loadCaseCatalog()` — validates bundled cases at startup. |
+| [`src/data/caseTypes.ts`](../src/data/caseTypes.ts) | Case JSON types + `assertCasePack` / `assertCaseIndexFile`. |
+| [`src/data/caseRegistry.ts`](../src/data/caseRegistry.ts) | Imports `data/cases/*.json`, `getCasePack`, `DEFAULT_CASE_ID`, `resolveHostCaseId`. |
 | [`src/audio/audioBus.ts`](../src/audio/audioBus.ts) | Stub audio bus until Web Audio integration. |
 | [`index.html`](../index.html) | DOM roots: `#canvas`, `#ui-root`, `#debug-root`. |
 

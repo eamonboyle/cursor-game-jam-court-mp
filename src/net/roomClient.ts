@@ -44,11 +44,11 @@ export class RoomClient {
     return this._playerId !== null && this._playerId === this._hostId;
   }
 
-  hostRoom(displayName: string, baseUrl: string): void {
+  hostRoom(displayName: string, baseUrl: string, caseId?: string): void {
     this.disconnect();
     this.ws = new WebSocket(baseUrl);
     this.ws.onopen = (): void => {
-      const msg: ClientToServerMessage = { type: "host", displayName };
+      const msg: ClientToServerMessage = { type: "host", displayName, caseId };
       this.ws?.send(JSON.stringify(msg));
     };
     this.attachHandlers();

@@ -51,6 +51,54 @@ body {
   text-shadow: 0 1px 2px rgb(0 0 0 / 80%);
 }
 
+.case-panel {
+  margin-top: 12px;
+  max-width: min(440px, 100%);
+  pointer-events: auto;
+  padding: 10px 12px;
+  background: rgb(0 0 0 / 55%);
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.case-tagline {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  opacity: 0.82;
+  line-height: 1.35;
+}
+
+.case-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.case-select-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.case-select {
+  min-width: 12rem;
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  border-radius: 4px;
+  border: 1px solid rgb(255 255 255 / 22%);
+  background: rgb(0 0 0 / 45%);
+  color: inherit;
+}
+
+.mono {
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
 .trial-panel {
   margin-top: 12px;
   max-width: 22rem;

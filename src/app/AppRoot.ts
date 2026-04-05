@@ -1,5 +1,6 @@
 import { createAudioBusStub } from "../audio/audioBus";
-import { dataLoadersPlaceholder } from "../data/loaders";
+import { resolveHostCaseId } from "../data/caseRegistry";
+import { loadCaseCatalog } from "../data/loaders";
 import { mountDebugHud } from "../debug/hud";
 import { MatchController } from "../game/matchController";
 import { RoomClient } from "../net/roomClient";
@@ -29,11 +30,16 @@ export class AppRoot {
     const params = new URLSearchParams(location.search);
     const prejoinRoomId = params.get("room");
     const wsUrl = DEFAULT_ROOM_WS;
+    const initialCaseId = resolveHostCaseId(params.get("case") ?? undefined);
 
     this.stageReturn = createStage(canvas);
-    this.match = new MatchController(this.stageReturn.sceneState, () => {
-      this.stageReturn?.refreshCamera();
-    });
+    this.match = new MatchController(
+      this.stageReturn.sceneState,
+      () => {
+        this.stageReturn?.refreshCamera();
+      },
+      { initialCaseId },
+    );
 
     this.room.onState = (state) => {
       this.match?.hydrateFromNetwork(state);
@@ -63,7 +69,7 @@ export class AppRoot {
     });
     this.cleanupHud = mountDebugHud(debugRoot, this.stageReturn, this.match);
 
-    void dataLoadersPlaceholder();
+    void loadCaseCatalog();
     void createAudioBusStub();
 
     if (prejoinRoomId) {

@@ -11,8 +11,8 @@
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
 | **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
-| **Current phase / step** | **Milestone H** complete; **next: Milestone I** — at least three playable cases.                                                                                                                            |
-| **Next action**          | Content and case pipeline per [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) Milestone I; extend `/data` schemas as needed.                                     |
+| **Current phase / step** | **Milestone I** complete; **next: Milestone J** — browser-ready MVP stability / readability polish.                                                                                                         |
+| **Next action**          | Execution checklist Milestone J; performance, copy pass, and release-ready `npm run build` / preview QA.                                                                                                 |
 
 
 **Blockers:** none.
@@ -49,6 +49,12 @@ Do **not** paste full checklists into this file.
 ---
 
 ## Session log (newest first)
+
+### 2026-04-04 — Milestone I three playable cases
+
+- **Done:** `data/cases/*.json` + `index.json`; `caseTypes` validation + `caseRegistry`; `MatchState.caseId` + `examWitnessId`; `phaseTransitions` witness from case; `MatchCore` decks + `resetToFreshCase`; `MatchController` `initialCaseId` / `restartLocalTrial`; room **host** optional `caseId`; overlay docket select + **New local trial** + dynamic counsel/evidence buttons; `?case=` URL; Vitest for registry.
+- **Next:** Milestone J polish.
+- **Blockers / decisions:** Headless Chrome snapshot did not execute the Vite app in this environment; verify dossier labels and phase flow in a normal browser.
 
 ### 2026-04-04 — Milestone H multiplayer room
 

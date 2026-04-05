@@ -3,6 +3,8 @@ import {
   pickAiJudgeRuling,
   pickAiJuryVote,
 } from "./ai/seatBehavior";
+import { DEFAULT_CASE_ID, getCasePack } from "../data/caseRegistry";
+import type { CaseCard } from "../data/caseTypes";
 import type { CounselSide } from "./counsel";
 import {
   tryAppendJudgeRuling,
@@ -47,10 +49,34 @@ export class MatchCore {
   private lastAiJuryMs = 0;
   private objectionEnteredMs = 0;
 
-  constructor() {
-    const initial = createInitialMatchState();
+  private prosecutionCards: readonly CaseCard[] = [];
+  private defenseCards: readonly CaseCard[] = [];
+
+  constructor(caseId: string = DEFAULT_CASE_ID) {
+    this.loadCaseDecks(caseId);
+    const initial = createInitialMatchState(caseId);
     this.state = initial.state;
     this.timer = initial.timer;
+  }
+
+  private loadCaseDecks(caseId: string): void {
+    const p = getCasePack(caseId);
+    this.prosecutionCards = p.prosecutionCards;
+    this.defenseCards = p.defenseCards;
+  }
+
+  /** Local-only: return to idle snapshot for a new docket (Milestone I). */
+  resetToFreshCase(caseId: string): void {
+    this.loadCaseDecks(caseId);
+    const initial = createInitialMatchState(caseId);
+    this.state = initial.state;
+    this.timer.reset(initial.timer.totalMs);
+    this.timer.remainingMs = initial.timer.remainingMs;
+    this.timer.isPaused = initial.timer.isPaused;
+    this.lastAiJuryMs = 0;
+    this.objectionEnteredMs = 0;
+    this.lastTs = nowMs();
+    this.emit();
   }
 
   getState(): MatchState {
@@ -59,6 +85,7 @@ export class MatchCore {
 
   /** Replace all state from server snapshot (network client). */
   hydrate(snapshot: MatchState): void {
+    this.loadCaseDecks(snapshot.caseId);
     this.state = snapshot;
     this.timer.reset(snapshot.turnTimer.totalMs);
     this.timer.remainingMs = snapshot.turnTimer.remainingMs;
@@ -253,7 +280,12 @@ export class MatchCore {
       return;
     }
     const salt = this.state.playedCards.length + this.state.phase.length;
-    const id = pickAiCounselCardId("prosecution", salt);
+    const id = pickAiCounselCardId(
+      "prosecution",
+      salt,
+      this.prosecutionCards,
+      this.defenseCards,
+    );
     this.state = {
       ...this.state,
       playedCards: [
@@ -275,7 +307,12 @@ export class MatchCore {
       return;
     }
     const salt = this.state.playedCards.length + this.state.phase.length + 3;
-    const id = pickAiCounselCardId("defense", salt);
+    const id = pickAiCounselCardId(
+      "defense",
+      salt,
+      this.prosecutionCards,
+      this.defenseCards,
+    );
     this.state = {
       ...this.state,
       playedCards: [

@@ -1,0 +1,21 @@
+{
+  "id": "case_parcel_of_doubt",
+  "title": "Acme Parcel Service v. Kim — Parcel of Doubt",
+  "tagline": "A missing collectible figures in a same-day delivery gone theatrical.",
+  "witnessId": "witness_courier_aj",
+  "prosecutionCards": [
+    { "id": "pro_chain_of_custody", "label": "Break the chain of custody story" },
+    { "id": "pro_geofence", "label": "Geofence ping drama" },
+    { "id": "pro_driver_log", "label": "Driver log contradiction" }
+  ],
+  "defenseCards": [
+    { "id": "def_misscan", "label": "Warehouse mis-scan theory" },
+    { "id": "def_neighbor_signed", "label": "Neighbor signed—wrong porch" },
+    { "id": "def_collectible_rumor", "label": "Collectible never left the vault" }
+  ],
+  "evidence": [
+    { "id": "ev_crushed_box", "label": "Photo of suspiciously perfect box" },
+    { "id": "ev_doorcam", "label": "Door-cam clip (16:9 crop)" },
+    { "id": "ev_insurance_form", "label": "Insurance form with comic sans" }
+  ]
+}

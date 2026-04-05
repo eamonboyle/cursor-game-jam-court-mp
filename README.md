@@ -33,7 +33,9 @@ npm run test        # Vitest (phase transition unit tests)
 
 Use **two terminals** for multiplayer smoke tests: `npm run room-server` then `npm run dev`. Optional: set `VITE_ROOM_WS` in `.env` if the room host is not on the default URL.
 
-**Milestones A–H** are complete through counsel actions, judge rulings, jury verdict, **local AI seat fill**, and a **minimal authoritative room** (host/join, role assignment, shared `MatchState`). See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone I** — multiple complete cases.
+**Query params:** `?case=<case_id>` selects the starting docket (see `data/cases/index.json`). Example: [`http://localhost:5173/?case=case_verified_hot_take`](http://localhost:5173/?case=case_verified_hot_take). Invalid ids fall back to the default case.
+
+**Milestones A–I** are complete through counsel actions, judge rulings, jury verdict, **local AI seat fill**, **minimal authoritative room**, and **three bundled JSON cases** (`data/cases/`) wired into `MatchState.caseId`, witness id, counsel decks, and evidence. See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone J** — browser-ready MVP polish.
 
 ## Contributing / agents
 

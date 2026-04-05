@@ -1,3 +1,4 @@
+import { DEFAULT_CASE_ID, getCasePack } from "../data/caseRegistry";
 import type { PlayedCardEntry } from "./counsel";
 import type { JudgeRulingId } from "./judgeRulings";
 import type { JuryVoteEntry, VerdictOutcome } from "./jury";
@@ -17,6 +18,10 @@ export type RulingEntry = {
 };
 
 export type MatchState = {
+  /** Active authored docket (Milestone I). */
+  caseId: string;
+  /** Witness seat ID during examination / cross; from case JSON. */
+  examWitnessId: string;
   phase: TrialPhase;
   activeRole: ActiveRole;
   turnTimer: TurnTimerSnapshot;
@@ -42,10 +47,15 @@ export type MatchState = {
 
 export const DEFAULT_PHASE_MS = 45_000;
 
-export function createInitialMatchState(): { state: MatchState; timer: TurnTimer } {
+export function createInitialMatchState(
+  caseId: string = DEFAULT_CASE_ID,
+): { state: MatchState; timer: TurnTimer } {
+  const pack = getCasePack(caseId);
   const timer = new TurnTimer(0);
   timer.pause();
   const state: MatchState = {
+    caseId: pack.id,
+    examWitnessId: pack.witnessId,
     phase: "idle",
     activeRole: "none",
     turnTimer: timer.snapshot(),

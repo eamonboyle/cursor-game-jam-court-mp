@@ -1,9 +1,6 @@
 import type { CounselSide } from "../game/counsel";
-import {
-  STUB_DEFENSE_CARDS,
-  STUB_EVIDENCE_BANK,
-  STUB_PROSECUTION_CARDS,
-} from "../game/counsel";
+import { getCasePack, listCaseSummaries } from "../data/caseRegistry";
+import type { CasePack } from "../data/caseTypes";
 import type { JudgeRulingId } from "../game/judgeRulings";
 import { BOUNDED_JUDGE_RULINGS } from "../game/judgeRulings";
 import {
@@ -61,13 +58,16 @@ function createUiMatchActions(match: MatchController, room: RoomClient): UiMatch
   };
 }
 
-function wireCounselButtons(root: HTMLElement, actions: UiMatchActions): void {
+function rebuildCounselPanel(root: HTMLElement, pack: CasePack, actions: UiMatchActions): void {
   const pro = root.querySelector<HTMLDivElement>("#pro-cards");
   const def = root.querySelector<HTMLDivElement>("#def-cards");
   const ev = root.querySelector<HTMLDivElement>("#evidence-bank");
   if (!pro || !def || !ev) return;
+  pro.replaceChildren();
+  def.replaceChildren();
+  ev.replaceChildren();
 
-  for (const c of STUB_PROSECUTION_CARDS) {
+  for (const c of pack.prosecutionCards) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "counsel-card-btn counsel-card-btn--pro";
@@ -75,7 +75,7 @@ function wireCounselButtons(root: HTMLElement, actions: UiMatchActions): void {
     btn.addEventListener("click", () => actions.playCard("prosecution", c.id));
     pro.appendChild(btn);
   }
-  for (const c of STUB_DEFENSE_CARDS) {
+  for (const c of pack.defenseCards) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "counsel-card-btn counsel-card-btn--def";
@@ -83,7 +83,7 @@ function wireCounselButtons(root: HTMLElement, actions: UiMatchActions): void {
     btn.addEventListener("click", () => actions.playCard("defense", c.id));
     def.appendChild(btn);
   }
-  for (const item of STUB_EVIDENCE_BANK) {
+  for (const item of pack.evidence) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "evidence-btn";
@@ -139,6 +139,7 @@ function wireRoomLobby(
   room: RoomClient,
   wsUrl: string,
   prefillRoomId: string | null,
+  getSelectedCaseId: () => string,
 ): void {
   const nameIn = root.querySelector<HTMLInputElement>("#room-display-name");
   const hostBtn = root.querySelector<HTMLButtonElement>("#room-host");
@@ -148,7 +149,7 @@ function wireRoomLobby(
 
   hostBtn?.addEventListener("click", () => {
     const n = nameIn?.value?.trim() || "Player";
-    room.hostRoom(n, wsUrl);
+    room.hostRoom(n, wsUrl, getSelectedCaseId());
   });
   joinBtn?.addEventListener("click", () => {
     const id = codeIn?.value?.trim();
@@ -175,7 +176,18 @@ export function mountUiOverlay(
   container.innerHTML = `
     <div class="ui-shell">
       <p class="ui-title">Court of Public Opinion</p>
-      <p class="ui-sub">Placeholder courtroom · <kbd>]</kbd> legal next · <kbd>[</kbd> / <kbd>\\</kbd> dev cycle · <strong>Milestone H</strong> room server</p>
+      <p class="ui-sub">Placeholder courtroom · <kbd>]</kbd> legal next · <kbd>[</kbd> / <kbd>\\</kbd> dev cycle · room server · <strong>Milestone I</strong> data dossiers</p>
+      <div class="case-panel" aria-label="Case selection">
+        <h3 class="counsel-heading">Docket</h3>
+        <p class="case-tagline" id="case-tagline-display">—</p>
+        <div class="case-row">
+          <label class="case-select-label">Trial
+            <select id="case-select" class="case-select"></select>
+          </label>
+          <button type="button" id="case-new-local" class="room-btn">New local trial</button>
+        </div>
+        <p class="room-hint">Offline: pick a dossier, then <strong>New local trial</strong>. Online: Host opens the selected docket; clients sync from the server.</p>
+      </div>
       <div class="room-panel" aria-label="Multiplayer room">
         <h3 class="counsel-heading">Room</h3>
         <p class="room-status" id="room-status">Offline (local trial)</p>
@@ -190,7 +202,7 @@ export function mountUiOverlay(
         <p class="room-hint">Terminal: <kbd>npm run room-server</kbd> · default <code id="room-ws-hint"></code></p>
       </div>
       <div class="trial-panel" aria-live="polite">
-        <p class="trial-case">Case: <span id="trial-case-id">stub_v_internet</span></p>
+        <p class="trial-case">Case: <span id="trial-case-title">—</span> <span class="trial-case-id mono" id="trial-case-id">—</span></p>
         <p class="trial-phase">Phase: <span id="trial-phase">—</span></p>
         <p class="trial-role">Active: <span id="trial-role">—</span></p>
         <p class="trial-timer">Timer: <span id="trial-timer">—</span></p>
@@ -246,12 +258,30 @@ export function mountUiOverlay(
   const wsHint = container.querySelector("#room-ws-hint");
   if (wsHint) wsHint.textContent = wsUrl;
 
+  const caseSelect = container.querySelector<HTMLSelectElement>("#case-select");
+  if (caseSelect) {
+    for (const c of listCaseSummaries()) {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = c.title;
+      caseSelect.appendChild(opt);
+    }
+    caseSelect.value = match.getState().caseId;
+  }
+
+  const getSelectedCaseId = (): string => caseSelect?.value ?? match.getState().caseId;
+
   const actions = createUiMatchActions(match, room);
-  wireCounselButtons(container, actions);
-  wireRoomLobby(container, room, wsUrl, prejoinRoomId);
+  let lastRenderedCaseId: string | undefined;
+  wireRoomLobby(container, room, wsUrl, prejoinRoomId, getSelectedCaseId);
   wireAiSeatPanel(container, actions);
   wireJuryVoteButtons(container, actions);
   wireJudgeRulingButtons(container, actions);
+
+  container.querySelector<HTMLButtonElement>("#case-new-local")?.addEventListener("click", () => {
+    if (room.isConnected()) return;
+    match.restartLocalTrial(getSelectedCaseId());
+  });
 
   const phaseEl = container.querySelector("#trial-phase");
   const roleEl = container.querySelector("#trial-role");
@@ -268,11 +298,26 @@ export function mountUiOverlay(
   const aiDef = container.querySelector<HTMLInputElement>("#ai-seat-def");
   const aiJudge = container.querySelector<HTMLInputElement>("#ai-seat-judge");
   const aiJury = container.querySelector<HTMLInputElement>("#ai-seat-jury");
+  const caseTaglineEl = container.querySelector("#case-tagline-display");
+  const trialCaseTitleEl = container.querySelector("#trial-case-title");
+  const trialCaseIdEl = container.querySelector("#trial-case-id");
+  const newLocalBtn = container.querySelector<HTMLButtonElement>("#case-new-local");
 
   const render = (): void => {
     const s = match.getState();
     const net = room.isConnected();
     const myRole = room.getRole();
+
+    if (s.caseId !== lastRenderedCaseId) {
+      lastRenderedCaseId = s.caseId;
+      rebuildCounselPanel(container, getCasePack(s.caseId), actions);
+      if (caseSelect) caseSelect.value = s.caseId;
+    }
+
+    const pack = getCasePack(s.caseId);
+    if (caseTaglineEl) caseTaglineEl.textContent = pack.tagline || "—";
+    if (trialCaseTitleEl) trialCaseTitleEl.textContent = pack.title;
+    if (trialCaseIdEl) trialCaseIdEl.textContent = `(${s.caseId})`;
 
     if (roomStatusEl) {
       if (net && room.getRoomId()) {
@@ -333,6 +378,9 @@ export function mountUiOverlay(
     if (aiDef) aiDef.checked = s.seatFill.defense === "ai";
     if (aiJudge) aiJudge.checked = s.seatFill.judge === "ai";
     if (aiJury) aiJury.checked = s.seatFill.jury === "ai";
+
+    if (caseSelect) caseSelect.disabled = net;
+    if (newLocalBtn) newLocalBtn.disabled = net;
 
     const objection = s.phase === "objection";
     const deliberation = s.phase === "jury_deliberation";

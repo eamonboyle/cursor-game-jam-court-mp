@@ -51,9 +51,12 @@ export function defaultActiveRoleForPhase(phase: TrialPhase): ActiveRole {
   }
 }
 
-export function defaultWitnessIdForPhase(phase: TrialPhase): string | null {
+export function defaultWitnessIdForPhase(
+  phase: TrialPhase,
+  examWitnessId: string,
+): string | null {
   if (phase === "examination" || phase === "cross") {
-    return "witness_stub";
+    return examWitnessId;
   }
   /** Objection: judge rules; witness line cleared until return to testimony. */
   return null;
@@ -97,7 +100,7 @@ export function applyPhaseTransition(
     ...prevState,
     phase: target,
     activeRole: defaultActiveRoleForPhase(target),
-    currentWitnessId: defaultWitnessIdForPhase(target),
+    currentWitnessId: defaultWitnessIdForPhase(target, prevState.examWitnessId),
     turnTimer: timer.snapshot(),
     juryVotes,
     verdictOutcome,

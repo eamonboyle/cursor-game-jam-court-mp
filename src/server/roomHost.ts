@@ -7,6 +7,7 @@
 import { randomUUID } from "node:crypto";
 import type { WebSocket } from "ws";
 import { WebSocketServer } from "ws";
+import { resolveHostCaseId } from "../data/caseRegistry";
 import { MatchCore } from "../game/matchCore";
 import type { ClientCommand } from "../net/roomProtocol";
 import {
@@ -33,10 +34,10 @@ class Room {
   readonly players = new Map<string, PlayerConn>();
   private tickHandle: ReturnType<typeof setInterval> | null = null;
 
-  constructor(id: string, hostId: string) {
+  constructor(id: string, hostId: string, caseId: string) {
     this.id = id;
     this.hostId = hostId;
-    this.core = new MatchCore();
+    this.core = new MatchCore(caseId);
     this.core.beginOpeningPhase();
   }
 
@@ -139,7 +140,10 @@ wss.on("connection", (ws: WebSocket) => {
     if (msg.type === "host") {
       const roomId = shortRoomId();
       const playerId = randomUUID();
-      const room = new Room(roomId, playerId);
+      const caseId = resolveHostCaseId(
+        typeof msg.caseId === "string" ? msg.caseId : undefined,
+      );
+      const room = new Room(roomId, playerId, caseId);
       const role = assignRoleForSlot(0);
       room.players.set(playerId, { ws, displayName: msg.displayName, role });
       rooms.set(roomId, room);

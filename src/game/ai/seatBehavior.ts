@@ -1,7 +1,3 @@
-import {
-  STUB_DEFENSE_CARDS,
-  STUB_PROSECUTION_CARDS,
-} from "../counsel";
 import type { CounselSide } from "../counsel";
 import { BOUNDED_JUDGE_RULINGS, type JudgeRulingId } from "../judgeRulings";
 import { JUROR_COUNT, type JuryVote } from "../jury";
@@ -25,8 +21,13 @@ export function pickAiJudgeRuling(state: MatchState): JudgeRulingId {
   return def?.id ?? "overrule";
 }
 
-export function pickAiCounselCardId(side: CounselSide, salt: number): string {
-  const deck = side === "prosecution" ? STUB_PROSECUTION_CARDS : STUB_DEFENSE_CARDS;
+export function pickAiCounselCardId(
+  side: CounselSide,
+  salt: number,
+  prosecutionDeck: readonly { id: string }[],
+  defenseDeck: readonly { id: string }[],
+): string {
+  const deck = side === "prosecution" ? prosecutionDeck : defenseDeck;
   const i = Math.abs(salt) % deck.length;
   return deck[i]?.id ?? deck[0]?.id ?? "pro_press";
 }
