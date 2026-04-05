@@ -1,6 +1,10 @@
 import type { CourtroomSceneState } from "../rendering/courtroomSceneState";
 import type { CounselSide } from "./counsel";
 import {
+  tryAppendJudgeRuling,
+  type JudgeRulingId,
+} from "./judgeRulings";
+import {
   applyPhaseTransition,
   listLegalNextPhases,
 } from "./phaseTransitions";
@@ -115,8 +119,28 @@ export class MatchController {
     void this.requestTransition(target, { force: true });
   }
 
+  /**
+   * Milestone E — judge picks from bounded ruling list during `objection` only.
+   */
+  recordJudgeRuling(rulingId: JudgeRulingId): boolean {
+    const result = tryAppendJudgeRuling(this.state, rulingId, performance.now());
+    if (!result.ok) {
+      if (this.debugTransitions) console.warn("[trial] judge ruling:", result.reason);
+      return false;
+    }
+    this.state = result.state;
+    if (this.debugTransitions) console.debug("[trial] ruling", rulingId);
+    this.emit();
+    return true;
+  }
+
   /** Milestone D — structured counsel action (local only). */
   playCard(side: CounselSide, cardId: string): void {
+    if (this.state.phase === "objection") {
+      if (this.debugTransitions)
+        console.warn("[trial] counsel cards disabled during objection (judge window)");
+      return;
+    }
     this.state = {
       ...this.state,
       playedCards: [
@@ -129,6 +153,11 @@ export class MatchController {
   }
 
   revealEvidence(evidenceId: string): void {
+    if (this.state.phase === "objection") {
+      if (this.debugTransitions)
+        console.warn("[trial] evidence reveals disabled during objection (judge window)");
+      return;
+    }
     if (this.state.evidenceStack.includes(evidenceId)) return;
     this.state = {
       ...this.state,

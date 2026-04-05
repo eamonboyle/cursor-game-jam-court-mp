@@ -37,8 +37,10 @@ export function defaultActiveRoleForPhase(phase: TrialPhase): ActiveRole {
       return "judge";
     case "examination":
     case "cross":
-    case "objection":
       return "witness";
+    case "objection":
+      /** Milestone E: judge has the floor for bounded rulings. */
+      return "judge";
     case "jury_deliberation":
     case "verdict":
       return "jury";
@@ -49,9 +51,10 @@ export function defaultActiveRoleForPhase(phase: TrialPhase): ActiveRole {
 }
 
 export function defaultWitnessIdForPhase(phase: TrialPhase): string | null {
-  if (phase === "examination" || phase === "cross" || phase === "objection") {
+  if (phase === "examination" || phase === "cross") {
     return "witness_stub";
   }
+  /** Objection: judge rules; witness line cleared until return to testimony. */
   return null;
 }
 

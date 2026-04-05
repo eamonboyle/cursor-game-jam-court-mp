@@ -199,7 +199,7 @@
 - [x] Milestone B: Courtroom scene renders with placeholder assets.
 - [x] Milestone C: Local single-case trial flow works with debug controls.
 - [x] Milestone D: Prosecutor and Defense can play cards and evidence.
-- [ ] Milestone E: Judge can rule in bounded windows.
+- [x] Milestone E: Judge can rule in bounded windows.
 - [ ] Milestone F: Jury can evaluate and vote.
 - [ ] Milestone G: AI can fill empty seats.
 - [ ] Milestone H: Multiplayer room flow works.

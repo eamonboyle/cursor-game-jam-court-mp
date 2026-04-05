@@ -11,7 +11,6 @@ export class CourtroomSceneState {
 
   getSuggestedCameraPreset(): CameraPresetId {
     if (this.phase === "verdict" || this.phase === "jury_deliberation") return "jury";
-    if (this.phase === "objection") return "wide";
     if (this.activeSpeaker === "witness") return "witness";
     if (this.activeSpeaker === "judge") return "judge";
     if (this.activeSpeaker === "prosecution") return "prosecution";

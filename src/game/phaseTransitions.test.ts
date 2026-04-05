@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   ALLOWED_TRANSITIONS,
   applyPhaseTransition,
+  defaultActiveRoleForPhase,
   isTransitionAllowed,
   listLegalNextPhases,
 } from "./phaseTransitions";
@@ -48,6 +49,10 @@ describe("phaseTransitions", () => {
     if (!r1.ok) return;
     expect(r1.state.phase).toBe("examination");
     expect(r1.state.currentWitnessId).toBe("witness_stub");
+  });
+
+  it("objection phase puts judge active for bounded rulings", () => {
+    expect(defaultActiveRoleForPhase("objection")).toBe("judge");
   });
 
   it("rejects examination -> closing without force", () => {

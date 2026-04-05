@@ -11,8 +11,8 @@
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
 | **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
-| **Current phase / step** | **Milestone D** complete; **next: Milestone E** — Judge rulings in bounded windows.                                                                                                                        |
-| **Next action**          | Gameplay / roles checklists for objection UI + judge window; follow [`docs/production_sequencing.md`](docs/production_sequencing.md).                                                                     |
+| **Current phase / step** | **Milestone E** complete; **next: Milestone F** — Jury evaluate and vote.                                                                                                                               |
+| **Next action**          | Wire jury deliberation UI and vote aggregation; follow [`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md) Phase 6+ and vision Milestone F.            |
 
 
 **Blockers:** none.
@@ -58,6 +58,12 @@ Do **not** paste full checklists into this file.
 - **Next:** …
 - **Blockers / decisions:** …
 ```
+
+### 2026-04-06 — Milestone E judge bounded rulings
+
+- **Done:** `objection` phase assigns `activeRole` judge; `tryAppendJudgeRuling` + `recordJudgeRuling`; counsel/evidence inputs blocked during objection; overlay judge palette + last ruling line; Vitest for rulings + active role; camera uses judge preset (removed objection-wide override); `RulingEntry.rulingId` optional field.
+- **Next:** Milestone F (jury vote UI and state).
+- **Blockers / decisions:** Ticket 9 jury vote screen still open — judge window portion shipped under Milestone E.
 
 ### 2026-04-06 — Milestone D counsel UI + camera/lighting fix
 

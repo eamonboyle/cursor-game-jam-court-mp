@@ -75,6 +75,33 @@ body {
   background: rgb(0 0 0 / 35%);
 }
 
+.judge-panel {
+  margin-top: 12px;
+  max-width: min(640px, 100%);
+  pointer-events: auto;
+}
+
+.judge-panel-hint {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  opacity: 0.78;
+  line-height: 1.35;
+}
+
+.judge-ruling-btn {
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 0.74rem;
+  border-radius: 5px;
+  border: 1px solid rgb(220 190 120 / 50%);
+  color: inherit;
+  background: rgb(40 35 22 / 55%);
+}
+
+.judge-ruling-btn:hover:not(:disabled) {
+  background: rgb(220 190 120 / 14%);
+}
+
 .counsel-panel {
   margin-top: 14px;
   display: grid;
@@ -114,9 +141,16 @@ body {
   background: rgb(0 0 0 / 45%);
 }
 
-.counsel-card-btn:hover,
-.evidence-btn:hover {
+.counsel-card-btn:hover:not(:disabled),
+.evidence-btn:hover:not(:disabled) {
   background: rgb(255 255 255 / 12%);
+}
+
+.counsel-card-btn:disabled,
+.evidence-btn:disabled,
+.judge-ruling-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .counsel-card-btn--pro {

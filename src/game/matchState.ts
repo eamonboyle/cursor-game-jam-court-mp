@@ -1,4 +1,5 @@
 import type { PlayedCardEntry } from "./counsel";
+import type { JudgeRulingId } from "./judgeRulings";
 import type { ActiveRole } from "./roles";
 import type { TrialPhase } from "./trialPhase";
 import type { TurnTimerSnapshot } from "./turnTimer";
@@ -8,6 +9,8 @@ export type RulingEntry = {
   phase: TrialPhase;
   summary: string;
   atMs: number;
+  /** Set when entered from the bounded judge palette (Milestone E). */
+  rulingId?: JudgeRulingId;
 };
 
 export type MatchState = {
