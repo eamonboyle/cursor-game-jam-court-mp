@@ -5,6 +5,9 @@ Browser-based multiplayer courtroom party game: fast, theatrical trials with str
 ## MVP in brief
 
 - **Session length:** about 8–12 minutes per trial (see [`docs/01_game_vision.md`](docs/01_game_vision.md)).
+- **Scope:** locked MVP boundaries and content targets in [**`docs/mvp-scope.md`**](docs/mvp-scope.md).
+- **Art / audio:** PS1 direction and asset lists in [**`docs/art_direction_and_assets.md`**](docs/art_direction_and_assets.md).
+- **Build order:** [**`docs/production_sequencing.md`**](docs/production_sequencing.md) (locked sequencing for implementation).
 - **Focus:** one stable courtroom, deterministic data-driven cases, AI-filled empty seats, desktop browser first.
 - **Design and implementation tracking:** [`docs/`](docs/) for specs; [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md) for current status; **[`AGENTS.md`](AGENTS.md)** for mandatory AI/human workflow.
 
@@ -26,7 +29,7 @@ npm run lint
 npm run typecheck
 ```
 
-Vision Phase 1 bootstrap is complete (see [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md)). Next milestone: Vision Phase 2 — MVP scope lock ([`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md)).
+Vision Phases 0–4 are complete through production sequencing (see [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md)). Next focus: **Milestone B** — courtroom with placeholder assets, following [`docs/production_sequencing.md`](docs/production_sequencing.md) ([`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md)).
 
 ## Contributing / agents
 
