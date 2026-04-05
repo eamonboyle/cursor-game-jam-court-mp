@@ -11,8 +11,8 @@
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Project**              | Court of Public Opinion                                                                                                                                                                                   |
 | **Active track**         | Vision Phase 5 milestones + gameplay loop checklist ([`docs/02_core_gameplay_loop_execution_checklist.md`](docs/02_core_gameplay_loop_execution_checklist.md)).                                      |
-| **Current phase / step** | **Milestone G** complete; **next: Milestone H** — multiplayer room flow.                                                                                                                                   |
-| **Next action**          | Room schema and command channel (Colyseus-class); follow [`docs/04_technical_architecture_execution_checklist.md`](docs/04_technical_architecture_execution_checklist.md) Phase 8 and vision Milestone H. |
+| **Current phase / step** | **Milestone H** complete; **next: Milestone I** — at least three playable cases.                                                                                                                            |
+| **Next action**          | Content and case pipeline per [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) Milestone I; extend `/data` schemas as needed.                                     |
 
 
 **Blockers:** none.
@@ -49,6 +49,12 @@ Do **not** paste full checklists into this file.
 ---
 
 ## Session log (newest first)
+
+### 2026-04-04 — Milestone H multiplayer room
+
+- **Done:** `MatchCore` + browser `MatchController` with `hydrateFromNetwork` / `setNetworkClientMode`; `src/net/roomProtocol.ts`, `roomClient.ts`; Node `ws` server `src/server/roomHost.ts` (`npm run room-server`, `ROOM_PORT` / default 8787); overlay room panel + `AppRoot` wiring + `VITE_ROOM_WS`; join-via-`?room=` suppresses local tick until welcome.
+- **Next:** Milestone I (cases in `/data`).
+- **Blockers / decisions:** Room server is in-process memory only (dev/local); production would replace with hosted multiplayer per tech arch.
 
 ### Template (copy for new entries)
 

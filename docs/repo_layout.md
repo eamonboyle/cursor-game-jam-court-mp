@@ -12,6 +12,8 @@ Planned top-level folders:
 | `src/rendering` | Three.js renderer, scenes, cameras, loop |
 | `src/ui` | HTML/CSS overlay, HUD, panels |
 | `src/game` | Match state, rules, actions, trial phases |
+| `src/net` | Room protocol + browser WebSocket client (Milestone H) |
+| `src/server` | Dev-only authoritative room host (Node `ws`) |
 | `src/data` | Loaders, validation against JSON schemas |
 | `src/audio` | Music and one-shot hooks |
 | `src/debug` | Dev panels, inspectors, logging helpers |
@@ -25,7 +27,7 @@ Planned top-level folders:
 | [`src/main.ts`](../src/main.ts) | Application entry only: CSS import + `createApp().start()`. |
 | [`src/style.css`](../src/style.css) | Full-viewport layout: `#canvas`, `#ui-root`, `#debug-root`. |
 | [`src/app/bootstrap.ts`](../src/app/bootstrap.ts) | `createApp()` — installs global error handlers, returns `AppRoot`. |
-| [`src/app/AppRoot.ts`](../src/app/AppRoot.ts) | Wires `MatchController`, Three.js stage, overlay, and debug HUD. |
+| [`src/app/AppRoot.ts`](../src/app/AppRoot.ts) | Wires `MatchController`, `RoomClient`, Three.js stage, overlay (`mountUiOverlay` + `wsUrl` / `?room=`), and debug HUD. |
 | [`src/app/installGlobalErrorHandlers.ts`](../src/app/installGlobalErrorHandlers.ts) | Fail-safe `error` / `unhandledrejection` console logging. |
 | [`src/rendering/stage.ts`](../src/rendering/stage.ts) | Composes renderer, courtroom placeholder scene, cinematic cameras, loop, dev hotkeys. |
 | [`src/rendering/rendererBootstrap.ts`](../src/rendering/rendererBootstrap.ts) | WebGL renderer factory (color space, DPR). |
@@ -41,7 +43,11 @@ Planned top-level folders:
 | [`src/game/matchState.ts`](../src/game/matchState.ts) | `MatchState` model + initial factory. |
 | [`src/game/turnTimer.ts`](../src/game/turnTimer.ts) | Turn timer with pause / resume / expire ticks. |
 | [`src/game/phaseTransitions.ts`](../src/game/phaseTransitions.ts) | Allowed-edge map + `applyPhaseTransition`. |
-| [`src/game/matchController.ts`](../src/game/matchController.ts) | RAF loop, dev keys, listeners, visual sync, counsel, judge rulings, `castJuryVote`, AI `runAiSeatFill`. |
+| [`src/game/matchCore.ts`](../src/game/matchCore.ts) | Authoritative trial simulation: timers, phase transitions, counsel/judge/jury actions, AI seat fill (shared by client shell and room server, Milestone H). |
+| [`src/game/matchController.ts`](../src/game/matchController.ts) | Browser shell: RAF loop (paused in network client mode), dev keys / network key forward, visual sync, `hydrateFromNetwork`. |
+| [`src/net/roomProtocol.ts`](../src/net/roomProtocol.ts) | Room player public view, client/server messages, command validation, role assignment. |
+| [`src/net/roomClient.ts`](../src/net/roomClient.ts) | Browser WebSocket client for the local room host. |
+| [`src/server/roomHost.ts`](../src/server/roomHost.ts) | Node `ws` authoritative room server (`npm run room-server`; `ROOM_PORT` or default `8787`). |
 | [`src/game/counsel.ts`](../src/game/counsel.ts) | `CounselSide`, stub card/evidence definitions (Milestone D). |
 | [`src/game/judgeRulings.ts`](../src/game/judgeRulings.ts) | Bounded judge ruling IDs + `tryAppendJudgeRuling` (Milestone E). |
 | [`src/game/judgeRulings.test.ts`](../src/game/judgeRulings.test.ts) | Vitest for objection-only rulings palette. |

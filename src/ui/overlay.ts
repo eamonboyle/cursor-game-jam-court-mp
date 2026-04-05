@@ -1,25 +1,67 @@
+import type { CounselSide } from "../game/counsel";
 import {
   STUB_DEFENSE_CARDS,
   STUB_EVIDENCE_BANK,
   STUB_PROSECUTION_CARDS,
 } from "../game/counsel";
+import type { JudgeRulingId } from "../game/judgeRulings";
+import { BOUNDED_JUDGE_RULINGS } from "../game/judgeRulings";
 import {
   formatVerdictOutcome,
   JUROR_COUNT,
   summarizeJuryVotes,
+  type JuryVote,
 } from "../game/jury";
-import { BOUNDED_JUDGE_RULINGS } from "../game/judgeRulings";
 import type { MatchController } from "../game/matchController";
 import { createJamSoloSeatFill } from "../game/seatFill";
+import type { SeatFillMap } from "../game/seatFill";
+import type { RoomClient } from "../net/roomClient";
 
 function formatMs(ms: number): string {
   return `${Math.ceil(ms / 1000)}s`;
 }
 
-function wireCounselButtons(
-  root: HTMLElement,
-  match: MatchController,
-): void {
+/** UI-facing actions (local MatchController or room commands). */
+export type UiMatchActions = {
+  playCard(side: CounselSide, cardId: string): void;
+  revealEvidence(evidenceId: string): void;
+  castJuryVote(vote: JuryVote): void;
+  recordJudgeRuling(rulingId: JudgeRulingId): void;
+  patchSeatFill(patch: Partial<SeatFillMap>): void;
+  setSeatFill(seatFill: SeatFillMap): void;
+};
+
+function createUiMatchActions(match: MatchController, room: RoomClient): UiMatchActions {
+  const useNet = (): boolean => room.isConnected();
+  return {
+    playCard(side, cardId) {
+      if (useNet()) room.sendCommand({ kind: "playCard", side, cardId });
+      else match.playCard(side, cardId);
+    },
+    revealEvidence(evidenceId) {
+      if (useNet()) room.sendCommand({ kind: "revealEvidence", evidenceId });
+      else match.revealEvidence(evidenceId);
+    },
+    castJuryVote(vote) {
+      if (useNet()) room.sendCommand({ kind: "castJuryVote", vote });
+      else match.castJuryVote(vote);
+    },
+    recordJudgeRuling(rulingId) {
+      if (useNet()) room.sendCommand({ kind: "recordJudgeRuling", rulingId });
+      else match.recordJudgeRuling(rulingId);
+    },
+    patchSeatFill(patch) {
+      if (useNet()) room.sendCommand({ kind: "patchSeatFill", patch });
+      else match.patchSeatFill(patch);
+    },
+    setSeatFill(seatFill) {
+      if (useNet()) room.sendCommand({ kind: "setSeatFill", seatFill });
+      else match.setSeatFill(seatFill);
+    },
+  };
+}
+
+function wireCounselButtons(root: HTMLElement, actions: UiMatchActions): void {
   const pro = root.querySelector<HTMLDivElement>("#pro-cards");
   const def = root.querySelector<HTMLDivElement>("#def-cards");
   const ev = root.querySelector<HTMLDivElement>("#evidence-bank");
@@ -30,7 +72,7 @@ function wireCounselButtons(
     btn.type = "button";
     btn.className = "counsel-card-btn counsel-card-btn--pro";
     btn.textContent = c.label;
-    btn.addEventListener("click", () => match.playCard("prosecution", c.id));
+    btn.addEventListener("click", () => actions.playCard("prosecution", c.id));
     pro.appendChild(btn);
   }
   for (const c of STUB_DEFENSE_CARDS) {
@@ -38,7 +80,7 @@ function wireCounselButtons(
     btn.type = "button";
     btn.className = "counsel-card-btn counsel-card-btn--def";
     btn.textContent = c.label;
-    btn.addEventListener("click", () => match.playCard("defense", c.id));
+    btn.addEventListener("click", () => actions.playCard("defense", c.id));
     def.appendChild(btn);
   }
   for (const item of STUB_EVIDENCE_BANK) {
@@ -46,43 +88,40 @@ function wireCounselButtons(
     btn.type = "button";
     btn.className = "evidence-btn";
     btn.textContent = item.label;
-    btn.addEventListener("click", () => match.revealEvidence(item.id));
+    btn.addEventListener("click", () => actions.revealEvidence(item.id));
     ev.appendChild(btn);
   }
 }
 
-function wireAiSeatPanel(root: HTMLElement, match: MatchController): void {
+function wireAiSeatPanel(root: HTMLElement, actions: UiMatchActions): void {
   const pro = root.querySelector<HTMLInputElement>("#ai-seat-pro");
   const def = root.querySelector<HTMLInputElement>("#ai-seat-def");
   const judge = root.querySelector<HTMLInputElement>("#ai-seat-judge");
   const jury = root.querySelector<HTMLInputElement>("#ai-seat-jury");
   const preset = root.querySelector<HTMLButtonElement>("#ai-preset-jam-solo");
   pro?.addEventListener("change", () => {
-    match.patchSeatFill({ prosecution: pro.checked ? "ai" : "human" });
+    actions.patchSeatFill({ prosecution: pro.checked ? "ai" : "human" });
   });
   def?.addEventListener("change", () => {
-    match.patchSeatFill({ defense: def.checked ? "ai" : "human" });
+    actions.patchSeatFill({ defense: def.checked ? "ai" : "human" });
   });
   judge?.addEventListener("change", () => {
-    match.patchSeatFill({ judge: judge.checked ? "ai" : "human" });
+    actions.patchSeatFill({ judge: judge.checked ? "ai" : "human" });
   });
   jury?.addEventListener("change", () => {
-    match.patchSeatFill({ jury: jury.checked ? "ai" : "human" });
+    actions.patchSeatFill({ jury: jury.checked ? "ai" : "human" });
   });
-  preset?.addEventListener("click", () => match.setSeatFill(createJamSoloSeatFill()));
+  preset?.addEventListener("click", () => actions.setSeatFill(createJamSoloSeatFill()));
 }
 
-function wireJuryVoteButtons(root: HTMLElement, match: MatchController): void {
+function wireJuryVoteButtons(root: HTMLElement, actions: UiMatchActions): void {
   const guilty = root.querySelector<HTMLButtonElement>("#jury-vote-guilty");
   const notGuilty = root.querySelector<HTMLButtonElement>("#jury-vote-not-guilty");
-  guilty?.addEventListener("click", () => match.castJuryVote("guilty"));
-  notGuilty?.addEventListener("click", () => match.castJuryVote("not_guilty"));
+  guilty?.addEventListener("click", () => actions.castJuryVote("guilty"));
+  notGuilty?.addEventListener("click", () => actions.castJuryVote("not_guilty"));
 }
 
-function wireJudgeRulingButtons(
-  root: HTMLElement,
-  match: MatchController,
-): void {
+function wireJudgeRulingButtons(root: HTMLElement, actions: UiMatchActions): void {
   const row = root.querySelector<HTMLDivElement>("#judge-rulings");
   if (!row) return;
   for (const r of BOUNDED_JUDGE_RULINGS) {
@@ -90,19 +129,66 @@ function wireJudgeRulingButtons(
     btn.type = "button";
     btn.className = "judge-ruling-btn";
     btn.textContent = r.label;
-    btn.addEventListener("click", () => match.recordJudgeRuling(r.id));
+    btn.addEventListener("click", () => actions.recordJudgeRuling(r.id));
     row.appendChild(btn);
   }
 }
 
+function wireRoomLobby(
+  root: HTMLElement,
+  room: RoomClient,
+  wsUrl: string,
+  prefillRoomId: string | null,
+): void {
+  const nameIn = root.querySelector<HTMLInputElement>("#room-display-name");
+  const hostBtn = root.querySelector<HTMLButtonElement>("#room-host");
+  const joinBtn = root.querySelector<HTMLButtonElement>("#room-join");
+  const codeIn = root.querySelector<HTMLInputElement>("#room-code-input");
+  if (prefillRoomId && codeIn) codeIn.value = prefillRoomId;
+
+  hostBtn?.addEventListener("click", () => {
+    const n = nameIn?.value?.trim() || "Player";
+    room.hostRoom(n, wsUrl);
+  });
+  joinBtn?.addEventListener("click", () => {
+    const id = codeIn?.value?.trim();
+    if (!id) return;
+    const n = nameIn?.value?.trim() || "Player";
+    room.joinRoom(id, n, wsUrl);
+  });
+}
+
+export type MountUiOptions = {
+  wsUrl: string;
+  /** If set, room code field is prefilled and you may auto-join from AppRoot. */
+  prejoinRoomId: string | null;
+};
+
 export function mountUiOverlay(
   container: HTMLElement,
   match: MatchController,
+  room: RoomClient,
+  options: MountUiOptions,
 ): () => void {
+  const { wsUrl, prejoinRoomId } = options;
+
   container.innerHTML = `
     <div class="ui-shell">
       <p class="ui-title">Court of Public Opinion</p>
-      <p class="ui-sub">Placeholder courtroom · <kbd>]</kbd> legal next · <kbd>[</kbd> / <kbd>\\</kbd> dev cycle</p>
+      <p class="ui-sub">Placeholder courtroom · <kbd>]</kbd> legal next · <kbd>[</kbd> / <kbd>\\</kbd> dev cycle · <strong>Milestone H</strong> room server</p>
+      <div class="room-panel" aria-label="Multiplayer room">
+        <h3 class="counsel-heading">Room</h3>
+        <p class="room-status" id="room-status">Offline (local trial)</p>
+        <div class="room-row">
+          <input type="text" id="room-display-name" class="room-input" placeholder="Display name" value="Player" maxlength="32" />
+        </div>
+        <div class="room-row room-row--actions">
+          <button type="button" id="room-host" class="room-btn">Host</button>
+          <input type="text" id="room-code-input" class="room-input room-input--code" placeholder="Room code" maxlength="16" />
+          <button type="button" id="room-join" class="room-btn">Join</button>
+        </div>
+        <p class="room-hint">Terminal: <kbd>npm run room-server</kbd> · default <code id="room-ws-hint"></code></p>
+      </div>
       <div class="trial-panel" aria-live="polite">
         <p class="trial-case">Case: <span id="trial-case-id">stub_v_internet</span></p>
         <p class="trial-phase">Phase: <span id="trial-phase">—</span></p>
@@ -118,7 +204,7 @@ export function mountUiOverlay(
       </div>
       <div class="ai-seat-panel" aria-label="AI seat fill">
         <h3 class="counsel-heading">AI seats</h3>
-        <p class="ai-seat-hint">Checked roles are driven by deterministic local bots. Preset = jam solo (AI judge + jury).</p>
+        <p class="ai-seat-hint">Checked roles are driven by deterministic local bots. Preset = jam solo (AI judge + jury). In a room, only the <strong>host</strong> can change these.</p>
         <div class="ai-seat-grid">
           <label class="ai-seat-label"><input type="checkbox" id="ai-seat-pro" /> Prosecution</label>
           <label class="ai-seat-label"><input type="checkbox" id="ai-seat-def" /> Defense</label>
@@ -157,10 +243,15 @@ export function mountUiOverlay(
     </div>
   `;
 
-  wireCounselButtons(container, match);
-  wireAiSeatPanel(container, match);
-  wireJuryVoteButtons(container, match);
-  wireJudgeRulingButtons(container, match);
+  const wsHint = container.querySelector("#room-ws-hint");
+  if (wsHint) wsHint.textContent = wsUrl;
+
+  const actions = createUiMatchActions(match, room);
+  wireCounselButtons(container, actions);
+  wireRoomLobby(container, room, wsUrl, prejoinRoomId);
+  wireAiSeatPanel(container, actions);
+  wireJuryVoteButtons(container, actions);
+  wireJudgeRulingButtons(container, actions);
 
   const phaseEl = container.querySelector("#trial-phase");
   const roleEl = container.querySelector("#trial-role");
@@ -172,6 +263,7 @@ export function mountUiOverlay(
   const pollEl = container.querySelector("#jury-poll-summary");
   const verdictEl = container.querySelector("#verdict-outcome");
   const seatFillEl = container.querySelector("#seat-fill-summary");
+  const roomStatusEl = container.querySelector("#room-status");
   const aiPro = container.querySelector<HTMLInputElement>("#ai-seat-pro");
   const aiDef = container.querySelector<HTMLInputElement>("#ai-seat-def");
   const aiJudge = container.querySelector<HTMLInputElement>("#ai-seat-judge");
@@ -179,6 +271,18 @@ export function mountUiOverlay(
 
   const render = (): void => {
     const s = match.getState();
+    const net = room.isConnected();
+    const myRole = room.getRole();
+
+    if (roomStatusEl) {
+      if (net && room.getRoomId()) {
+        const host = room.isHost() ? " · Host" : "";
+        roomStatusEl.textContent = `Room ${room.getRoomId()} · Seat: ${myRole ?? "—"}${host}`;
+      } else {
+        roomStatusEl.textContent = "Offline (local trial)";
+      }
+    }
+
     if (phaseEl) phaseEl.textContent = s.phase;
     if (roleEl) roleEl.textContent = s.activeRole;
     if (witnessEl) witnessEl.textContent = s.currentWitnessId ?? "—";
@@ -235,24 +339,38 @@ export function mountUiOverlay(
     const verdictPhase = s.phase === "verdict";
     const pollFull = s.juryVotes.length >= JUROR_COUNT;
 
+    const canPro = !net || myRole === "prosecution";
+    const canDef = !net || myRole === "defense";
+    const canCounselEvidence = !net || myRole === "prosecution" || myRole === "defense";
+    const canJudge = !net || myRole === "judge";
+    const canJury = !net || myRole === "jury";
+    const hostAi = !net || room.isHost();
+
     for (const btn of container.querySelectorAll<HTMLButtonElement>(".counsel-card-btn--pro")) {
       btn.disabled =
-        objection || deliberation || verdictPhase || s.seatFill.prosecution === "ai";
+        objection || deliberation || verdictPhase || s.seatFill.prosecution === "ai" || !canPro;
     }
     for (const btn of container.querySelectorAll<HTMLButtonElement>(".counsel-card-btn--def")) {
       btn.disabled =
-        objection || deliberation || verdictPhase || s.seatFill.defense === "ai";
+        objection || deliberation || verdictPhase || s.seatFill.defense === "ai" || !canDef;
     }
     for (const btn of container.querySelectorAll<HTMLButtonElement>(".evidence-btn")) {
-      btn.disabled = objection || deliberation || verdictPhase;
+      btn.disabled = objection || deliberation || verdictPhase || !canCounselEvidence;
     }
     for (const btn of container.querySelectorAll<HTMLButtonElement>(".judge-ruling-btn")) {
-      btn.disabled = !objection || s.seatFill.judge === "ai";
+      btn.disabled = !objection || s.seatFill.judge === "ai" || !canJudge;
     }
     for (const sel of ["#jury-vote-guilty", "#jury-vote-not-guilty"] as const) {
       const btn = container.querySelector<HTMLButtonElement>(sel);
-      if (btn) btn.disabled = !deliberation || pollFull || s.seatFill.jury === "ai";
+      if (btn) btn.disabled = !deliberation || pollFull || s.seatFill.jury === "ai" || !canJury;
     }
+
+    if (aiPro) aiPro.disabled = !hostAi;
+    if (aiDef) aiDef.disabled = !hostAi;
+    if (aiJudge) aiJudge.disabled = !hostAi;
+    if (aiJury) aiJury.disabled = !hostAi;
+    const presetBtn = container.querySelector<HTMLButtonElement>("#ai-preset-jam-solo");
+    if (presetBtn) presetBtn.disabled = !hostAi;
   };
 
   const unsub = match.subscribe(render);

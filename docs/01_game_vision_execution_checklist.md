@@ -202,7 +202,7 @@
 - [x] Milestone E: Judge can rule in bounded windows.
 - [x] Milestone F: Jury can evaluate and vote.
 - [x] Milestone G: AI can fill empty seats.
-- [ ] Milestone H: Multiplayer room flow works.
+- [x] Milestone H: Multiplayer room flow works.
 - [ ] Milestone I: At least three complete cases are playable.
 - [ ] Milestone J: Browser-ready MVP build is stable and readable.
 

@@ -1,58 +1,54 @@
 import type { CourtroomSceneState } from "../rendering/courtroomSceneState";
-import {
-  pickAiCounselCardId,
-  pickAiJudgeRuling,
-  pickAiJuryVote,
-} from "./ai/seatBehavior";
 import type { CounselSide } from "./counsel";
-import {
-  tryAppendJudgeRuling,
-  type JudgeRulingId,
-} from "./judgeRulings";
-import { JUROR_COUNT, tryCastJuryVote, type JuryVote } from "./jury";
-import {
-  applyPhaseTransition,
-  listLegalNextPhases,
-} from "./phaseTransitions";
-import {
-  attachTimerSnapshot,
-  createInitialMatchState,
-  type MatchState,
-} from "./matchState";
+import type { JudgeRulingId } from "./judgeRulings";
+import type { JuryVote } from "./jury";
+import { MatchCore } from "./matchCore";
+import type { MatchState } from "./matchState";
 import type { SeatFillMap } from "./seatFill";
-import { TRIAL_PHASES, trialPhaseIndex, type TrialPhase } from "./trialPhase";
-import type { TurnTimer } from "./turnTimer";
+import type { TrialPhase } from "./trialPhase";
 
-const MAX_FRAME_MS = 100;
-const AI_JURY_COOLDOWN_MS = 320;
-const AI_OBJECTION_DELAY_MS = 380;
+export type NetworkKeySink = {
+  advanceLegal(): void;
+  devCycle(delta: 1 | -1): void;
+};
 
+/**
+ * Browser shell: RAF loop, keyboard shortcuts, Three.js visual sync + MatchCore.
+ */
 export class MatchController {
-  private state: MatchState;
-  private readonly timer: TurnTimer;
-  private readonly listeners = new Set<(s: MatchState) => void>();
+  private readonly core: MatchCore;
   private rafId = 0;
-  private lastTs = performance.now();
-  private readonly debugTransitions = true;
-
-  private readonly phaseEndHandlers = new Map<TrialPhase, () => void>();
-  private readonly phaseStartHandlers = new Map<TrialPhase, () => void>();
-
-  private lastAiJuryMs = 0;
-  private objectionEnteredMs = 0;
+  /** When true, game clock + AI run on the room server; client only hydrates. */
+  private networkClientMode = false;
+  private networkKeySink: NetworkKeySink | null = null;
 
   readonly onKeyDown = (e: KeyboardEvent): void => {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)
       return;
+    if (this.networkClientMode) {
+      if (this.networkKeySink) {
+        if (e.key === "]") {
+          e.preventDefault();
+          this.networkKeySink.advanceLegal();
+        } else if (e.key === "[") {
+          e.preventDefault();
+          this.networkKeySink.devCycle(-1);
+        } else if (e.key === "\\") {
+          e.preventDefault();
+          this.networkKeySink.devCycle(1);
+        }
+      }
+      return;
+    }
     if (e.key === "]") {
       e.preventDefault();
-      this.advanceLegal();
+      this.core.advanceLegal();
     } else if (e.key === "[") {
       e.preventDefault();
-      this.devCycle(-1);
+      this.core.devCycle(-1);
     } else if (e.key === "\\") {
       e.preventDefault();
-      this.devCycle(1);
+      this.core.devCycle(1);
     }
   };
 
@@ -60,43 +56,61 @@ export class MatchController {
     private readonly visual: CourtroomSceneState,
     private readonly afterVisualSync?: () => void,
   ) {
-    const initial = createInitialMatchState();
-    this.state = initial.state;
-    this.timer = initial.timer;
+    this.core = new MatchCore();
+    this.core.subscribe(() => {
+      this.syncVisual();
+      this.afterVisualSync?.();
+    });
     this.syncVisual();
   }
 
   getState(): MatchState {
-    return this.state;
+    return this.core.getState();
   }
 
-  /** Milestone G — toggle which seats are AI-driven (local stub). */
+  /** Authoritative snapshot from room server (Milestone H). */
+  hydrateFromNetwork(snapshot: MatchState): void {
+    this.core.hydrate(snapshot);
+  }
+
+  /** Client follows server clock; call before `start()` when joining a room. */
+  setNetworkClientMode(
+    enabled: boolean,
+    keySink: NetworkKeySink | null = null,
+  ): void {
+    this.networkClientMode = enabled;
+    this.networkKeySink = keySink;
+  }
+
   setSeatFill(next: SeatFillMap): void {
-    this.state = { ...this.state, seatFill: next };
-    this.emit();
+    this.core.setSeatFill(next);
   }
 
   patchSeatFill(patch: Partial<SeatFillMap>): void {
-    this.setSeatFill({ ...this.state.seatFill, ...patch });
+    this.core.patchSeatFill(patch);
   }
 
   subscribe(fn: (s: MatchState) => void): () => void {
-    this.listeners.add(fn);
-    return () => this.listeners.delete(fn);
+    return this.core.subscribe(fn);
   }
 
-  /** Register cleanup when leaving a phase (Gameplay Phase 1 Step 9). */
   onPhaseEnd(phase: TrialPhase, fn: () => void): void {
-    this.phaseEndHandlers.set(phase, fn);
+    this.core.onPhaseEnd(phase, fn);
   }
 
   onPhaseStart(phase: TrialPhase, fn: () => void): void {
-    this.phaseStartHandlers.set(phase, fn);
+    this.core.onPhaseStart(phase, fn);
   }
 
-  start(): void {
+  /**
+   * @param skipOpeningPhase Use when loading `?room=` — server snapshot will hydrate opening.
+   */
+  start(options?: { skipOpeningPhase?: boolean }): void {
     window.addEventListener("keydown", this.onKeyDown);
-    void this.requestTransition("opening");
+    const skip = options?.skipOpeningPhase ?? false;
+    if (!this.networkClientMode && !skip) {
+      this.core.beginOpeningPhase();
+    }
     this.rafId = requestAnimationFrame(this.tick);
   }
 
@@ -106,214 +120,43 @@ export class MatchController {
   }
 
   requestTransition(target: TrialPhase, options?: { force?: boolean }): boolean {
-    const prev = this.state.phase;
-    const result = applyPhaseTransition(this.state, this.timer, target, {
-      force: options?.force,
-      atMs: performance.now(),
-    });
-    if (!result.ok) {
-      if (this.debugTransitions) console.warn("[trial]", result.reason);
-      return false;
-    }
-    this.phaseEndHandlers.get(prev)?.();
-    this.state = result.state;
-    if (target === "objection") {
-      this.objectionEnteredMs = performance.now();
-    }
-    if (target === "jury_deliberation") {
-      this.lastAiJuryMs = 0;
-    }
-    if (this.debugTransitions) console.debug("[trial]", prev, "->", target);
-    this.syncVisual();
-    this.emit();
-    this.phaseStartHandlers.get(target)?.();
-    return true;
+    return this.core.requestTransition(target, options);
   }
 
-  /** Deterministic: first legal edge from `listLegalNextPhases`. */
   advanceLegal(): void {
-    const next = listLegalNextPhases(this.state.phase)[0];
-    if (!next) return;
-    void this.requestTransition(next);
+    this.core.advanceLegal();
   }
 
-  /** Dev-only forced cycling across all phases (Gameplay Phase 1 Step 5). */
   devCycle(delta: 1 | -1): void {
-    const idx = trialPhaseIndex(this.state.phase);
-    const n = TRIAL_PHASES.length;
-    const nextIdx = (idx + delta + n) % n;
-    const target = TRIAL_PHASES[nextIdx];
-    if (!target) return;
-    void this.requestTransition(target, { force: true });
+    this.core.devCycle(delta);
   }
 
-  /** Milestone F — one juror vote per click until the stub panel is full. */
   castJuryVote(vote: JuryVote): boolean {
-    const result = tryCastJuryVote(this.state, vote, performance.now());
-    if (!result.ok) {
-      if (this.debugTransitions) console.warn("[trial] jury vote:", result.reason);
-      return false;
-    }
-    this.state = result.state;
-    if (this.debugTransitions) console.debug("[trial] jury vote", vote, this.state.juryVotes.length);
-    this.emit();
-    return true;
+    return this.core.castJuryVote(vote);
   }
 
   recordJudgeRuling(rulingId: JudgeRulingId): boolean {
-    const result = tryAppendJudgeRuling(this.state, rulingId, performance.now());
-    if (!result.ok) {
-      if (this.debugTransitions) console.warn("[trial] judge ruling:", result.reason);
-      return false;
-    }
-    this.state = {
-      ...result.state,
-      aiLatch: { ...result.state.aiLatch, judgeObjection: true },
-    };
-    if (this.debugTransitions) console.debug("[trial] ruling", rulingId);
-    this.emit();
-    return true;
+    return this.core.recordJudgeRuling(rulingId);
   }
 
-  /** Milestone D — structured counsel action (local only). */
   playCard(side: CounselSide, cardId: string): void {
-    if (
-      this.state.phase === "objection" ||
-      this.state.phase === "jury_deliberation" ||
-      this.state.phase === "verdict"
-    ) {
-      if (this.debugTransitions)
-        console.warn("[trial] counsel cards disabled in this phase");
-      return;
-    }
-    this.state = {
-      ...this.state,
-      playedCards: [
-        ...this.state.playedCards,
-        { side, cardId, atMs: performance.now() },
-      ],
-    };
-    if (this.debugTransitions) console.debug("[trial] card", side, cardId);
-    this.emit();
+    this.core.playCard(side, cardId);
   }
 
   revealEvidence(evidenceId: string): void {
-    if (
-      this.state.phase === "objection" ||
-      this.state.phase === "jury_deliberation" ||
-      this.state.phase === "verdict"
-    ) {
-      if (this.debugTransitions)
-        console.warn("[trial] evidence reveals disabled in this phase");
-      return;
-    }
-    if (this.state.evidenceStack.includes(evidenceId)) return;
-    this.state = {
-      ...this.state,
-      evidenceStack: [...this.state.evidenceStack, evidenceId],
-    };
-    if (this.debugTransitions) console.debug("[trial] evidence", evidenceId);
-    this.emit();
+    this.core.revealEvidence(evidenceId);
   }
 
   private readonly tick = (ts: number): void => {
     this.rafId = requestAnimationFrame(this.tick);
-    const dt = Math.min(ts - this.lastTs, MAX_FRAME_MS);
-    this.lastTs = ts;
-    this.runAiSeatFill(ts);
-    const expired = this.timer.tick(dt);
-    const next = attachTimerSnapshot(this.state, this.timer);
-    const timerChanged =
-      next.turnTimer.remainingMs !== this.state.turnTimer.remainingMs ||
-      next.turnTimer.isPaused !== this.state.turnTimer.isPaused;
-    if (timerChanged) {
-      this.state = next;
-      this.emit();
-    }
-    if (expired && this.debugTransitions) {
-      console.debug("[trial] timer expired", this.state.phase);
+    if (!this.networkClientMode) {
+      this.core.tick(ts);
     }
   };
 
-  private runAiSeatFill(now: number): void {
-    const s = this.state;
-    if (s.phase === "jury_deliberation" && s.seatFill.jury === "ai" && s.juryVotes.length < JUROR_COUNT) {
-      if (now - this.lastAiJuryMs < AI_JURY_COOLDOWN_MS) return;
-      this.lastAiJuryMs = now;
-      const vote = pickAiJuryVote(s.jurySentiment, s.juryVotes.length + 1);
-      void this.castJuryVote(vote);
-      return;
-    }
-    if (
-      s.phase === "objection" &&
-      s.seatFill.judge === "ai" &&
-      !s.aiLatch.judgeObjection &&
-      now - this.objectionEnteredMs >= AI_OBJECTION_DELAY_MS
-    ) {
-      void this.recordJudgeRuling(pickAiJudgeRuling(s));
-      return;
-    }
-    if (s.phase === "examination" || s.phase === "cross") {
-      if (s.seatFill.prosecution === "ai" && !s.aiLatch.prosecutionCard) {
-        this.aiPlayProsecutionCard();
-      }
-      if (s.seatFill.defense === "ai" && !s.aiLatch.defenseCard) {
-        this.aiPlayDefenseCard();
-      }
-    }
-  }
-
-  private aiPlayProsecutionCard(): void {
-    if (
-      this.state.phase === "objection" ||
-      this.state.phase === "jury_deliberation" ||
-      this.state.phase === "verdict"
-    ) {
-      return;
-    }
-    const salt = this.state.playedCards.length + this.state.phase.length;
-    const id = pickAiCounselCardId("prosecution", salt);
-    this.state = {
-      ...this.state,
-      playedCards: [
-        ...this.state.playedCards,
-        { side: "prosecution", cardId: id, atMs: performance.now() },
-      ],
-      aiLatch: { ...this.state.aiLatch, prosecutionCard: true },
-    };
-    if (this.debugTransitions) console.debug("[trial] AI prosecution", id);
-    this.emit();
-  }
-
-  private aiPlayDefenseCard(): void {
-    if (
-      this.state.phase === "objection" ||
-      this.state.phase === "jury_deliberation" ||
-      this.state.phase === "verdict"
-    ) {
-      return;
-    }
-    const salt = this.state.playedCards.length + this.state.phase.length + 3;
-    const id = pickAiCounselCardId("defense", salt);
-    this.state = {
-      ...this.state,
-      playedCards: [
-        ...this.state.playedCards,
-        { side: "defense", cardId: id, atMs: performance.now() },
-      ],
-      aiLatch: { ...this.state.aiLatch, defenseCard: true },
-    };
-    if (this.debugTransitions) console.debug("[trial] AI defense", id);
-    this.emit();
-  }
-
   private syncVisual(): void {
-    this.visual.setPhase(this.state.phase);
-    this.visual.setActiveSpeaker(this.state.activeRole);
-    this.afterVisualSync?.();
-  }
-
-  private emit(): void {
-    for (const fn of this.listeners) fn(this.state);
+    const s = this.core.getState();
+    this.visual.setPhase(s.phase);
+    this.visual.setActiveSpeaker(s.activeRole);
   }
 }

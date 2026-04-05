@@ -22,15 +22,18 @@ Browser-based multiplayer courtroom party game: fast, theatrical trials with str
 
 ```bash
 npm install
-npm run dev      # Vite dev server + hot reload
-npm run build    # Typecheck + production bundle to dist/
-npm run preview  # Serve dist/
+npm run dev         # Vite dev server + hot reload
+npm run room-server # Authoritative room WebSocket host (default ws://127.0.0.1:8787)
+npm run build       # Typecheck + production bundle to dist/
+npm run preview     # Serve dist/
 npm run lint
 npm run typecheck
-npm run test      # Vitest (phase transition unit tests)
+npm run test        # Vitest (phase transition unit tests)
 ```
 
-**Milestones A–G** are complete through counsel actions, judge rulings, jury verdict, and **local AI seat fill** (toggle per role + jam solo preset). See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone H** — multiplayer room flow.
+Use **two terminals** for multiplayer smoke tests: `npm run room-server` then `npm run dev`. Optional: set `VITE_ROOM_WS` in `.env` if the room host is not on the default URL.
+
+**Milestones A–H** are complete through counsel actions, judge rulings, jury verdict, **local AI seat fill**, and a **minimal authoritative room** (host/join, role assignment, shared `MatchState`). See [`docs/01_game_vision_execution_checklist.md`](docs/01_game_vision_execution_checklist.md) and [`TODO_IMPLEMENTATION.md`](TODO_IMPLEMENTATION.md). Next: **Milestone I** — multiple complete cases.
 
 ## Contributing / agents
 
